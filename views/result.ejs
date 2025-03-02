@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>分析结果</title>
+    <style>
+        .stats { margin: 20px 0; }
+        .issue { color: red; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>分析结果</h1>
+    
+    <div class="stats">
+        <h2>线程统计</h2>
+        <p>总线程数: <%= analysis.totalThreads %></p>
+        <ul>
+            <% Object.entries(analysis.stateCount).forEach(([state, count]) => { %>
+                <li><%= state %>: <%= count %></li>
+            <% }) %>
+        </ul>
+    </div>
+
+    <div class="issues">
+        <h2>潜在问题</h2>
+        <% if (analysis.potentialIssues.length === 0) { %>
+            <p>未发现明显问题</p>
+        <% } else { %>
+            <% analysis.potentialIssues.forEach(issue => { %>
+                <div class="issue"><%= issue %></div>
+            <% }) %>
+        <% } %>
+    </div>
+
+    <div class="sample">
+        <h2>示例线程</h2>
+        <% analysis.sampleThreads.forEach(thread => { %>
+            <div style="margin: 15px 0; border: 1px solid #ccc; padding: 10px;">
+                <h3><%= thread.name %></h3>
+                <p>状态: <%= thread.state %></p>
+                <pre><%= thread.stack.join('\n') %></pre>
+            </div>
+        <% }) %>
+    </div>
+</body>
+</html>

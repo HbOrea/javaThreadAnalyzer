@@ -3,6 +3,7 @@ const multer = require('multer');
 const fs = require('fs');
 const app = express();
 const upload = multer({ dest: 'uploads/' });
+let analysisCache = null;
 
 // 中间件设置
 app.use(express.static('public'));
@@ -21,6 +22,7 @@ app.post('/analyze', upload.single('jstackFile'), (req, res) => {
 
     const content = fs.readFileSync(req.file.path, 'utf8');
     const analysis = analyzeJstack(content);
+    analysisCache = analysis; // 缓存分析结果
     
     // 清理上传文件
     fs.unlinkSync(req.file.path);
@@ -35,7 +37,7 @@ function analyzeJstack(content) {
     const lockMap = new Map();
     let deadlocks = [];
     let currentThread = null;
-
+    const threadGroups = {}; // 替换原来的 
     // 分割线程块
     const lines = content.split('\n');
     lines.forEach(line => {
@@ -72,6 +74,11 @@ function analyzeJstack(content) {
         }
     });
 
+    // 添加最后一个线程
+    if (currentThread) {
+        threads.push(currentThread);
+    }
+
     // 分析潜在问题
     const potentialIssues = [];
     if (deadlocks && deadlocks[1] > 0) {
@@ -84,12 +91,70 @@ function analyzeJstack(content) {
         }
     });
 
+   // 按线程池名称分组统计
+   threads.forEach(thread => {
+        // 新正则匹配基础名称（如 "pool"）
+        const groupMatch = thread.name.match(/^(.*?)(?:-\d+)+(?:-thread-\d+)?$/);
+        if (groupMatch) {
+            const baseName = groupMatch[1]; // 获取基础名称（如 "pool"）
+            if (!threadGroups[baseName]) {
+                threadGroups[baseName] = {
+                    count: 0,
+                    states: {},
+                    instances: new Set() // 新增实例追踪
+                };
+            }
+            threadGroups[baseName].count++;
+            
+            // 记录原始完整名称实例
+            threadGroups[baseName].instances.add(thread.name);
+            
+            // 统计状态
+            threadGroups[baseName].states[thread.state] = 
+                (threadGroups[baseName].states[thread.state] || 0) + 1;
+        }
+    }); 
+
     return {
         totalThreads: threads.length,
         stateCount,
         potentialIssues,
-        sampleThreads: threads.slice(0, 5) // 示例显示前5个线程
+        threadGroups,
+        threads // 添加这行，将原始线程数据存入缓存 
     };
+}
+
+// 修改线程组详情路由
+app.get('/thread-group/:instanceName', (req, res) => {
+    const instanceName = decodeURIComponent(req.params.instanceName);
+    if (!analysisCache || !analysisCache.threads) {
+        return res.status(404).send('分析数据不可用');
+    }
+    
+    // 查找完全匹配实例名的线程
+    const groupThreads = analysisCache.threads.filter(t => 
+        t.name === instanceName
+    );
+    
+    res.render('group-details', {
+        instanceName,
+        threads: groupThreads,
+        groupName: instanceName
+    });
+});
+
+// 新增获取线程组详情的函数
+function getGroupThreads(groupName) {
+    // 这里需要实现从分析结果中获取指定线程组的逻辑
+    // 示例返回结构：
+    return [{
+        name: 'pool-1-thread-1',
+        state: 'RUNNABLE',
+        stack: [
+            'java.lang.Thread.sleep(Native Method)',
+            'com.example.MyClass.run(MyClass.java:123)'
+        ]
+    }];
 }
 
 app.listen(3000, () => {

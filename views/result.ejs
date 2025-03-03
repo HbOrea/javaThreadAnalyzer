@@ -13,11 +13,49 @@
     <div class="stats">
         <h2>线程统计</h2>
         <p>总线程数: <%= analysis.totalThreads %></p>
+        <h3>状态分布</h3>
         <ul>
             <% Object.entries(analysis.stateCount).forEach(([state, count]) => { %>
-                <li><%= state %>: <%= count %></li>
+                <li><strong><%= state %>:</strong> <%= count %> 个线程（占比 <%= (count / analysis.totalThreads * 100).toFixed(1) %>%）</li>
             <% }) %>
         </ul>
+        <!-- 原有统计保持不变 -->
+        <h3>线程组统计（Top 10）</h3>
+        <% if (analysis.threadGroups && Object.keys(analysis.threadGroups).length > 0) { %>
+            <% Object.entries(analysis.threadGroups)
+                .sort(([aName, aInfo], [bName, bInfo]) => bInfo.count - aInfo.count)
+                .slice(0, 10)
+                .forEach(([groupName, info]) => { %>
+                <div style="margin: 10px 0; padding: 10px; border: 1px solid #eee;">
+                    <h4><%= groupName %></h4>
+                    <p>线程数量: <%= info.count %>（包含 <%= info.instances.size %> 个实例组）</p>
+                    <% if (info.instances.size > 0) { %>
+                        <details>
+                            <summary>查看实例组</summary>
+                            <ul>
+                                <% Array.from(info.instances).forEach(instance => { %>
+                                    <li>
+                                        <a href="/thread-group/<%= encodeURIComponent(instance) %>" target="_blank">
+                                            <%= instance %>
+                                        </a>
+                                    </li>
+                                <% }) %>
+                            </ul>
+                        </details>
+                    <% } %>
+                    <strong>状态分布:</strong>
+                    <ul>
+                        <% Object.entries(info.states)
+                            .sort(([aState, aCount], [bState, bCount]) => bCount - aCount)
+                            .forEach(([state, count]) => { %>
+                            <li><%= state %>: <%= count %></li>
+                        <% }) %>
+                    </ul>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <p>未检测到线程组</p>
+        <% } %>
     </div>
 
     <div class="issues">
@@ -29,17 +67,6 @@
                 <div class="issue"><%= issue %></div>
             <% }) %>
         <% } %>
-    </div>
-
-    <div class="sample">
-        <h2>示例线程</h2>
-        <% analysis.sampleThreads.forEach(thread => { %>
-            <div style="margin: 15px 0; border: 1px solid #ccc; padding: 10px;">
-                <h3><%= thread.name %></h3>
-                <p>状态: <%= thread.state %></p>
-                <pre><%= thread.stack.join('\n') %></pre>
-            </div>
-        <% }) %>
     </div>
 </body>
 </html>

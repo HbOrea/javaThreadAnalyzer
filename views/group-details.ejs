@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= groupName %> 详情</title>
+    <style>
+        .thread-detail { margin: 15px 0; padding: 10px; border: 1px solid #ddd; }
+        .stack-trace { background: #f5f5f5; padding: 10px; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <style>
+        .thread-card {
+            margin: 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .thread-header {
+            padding: 10px;
+            background: #f5f5f5;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .stack-trace {
+            padding: 10px;
+            background: white;
+            display: none;
+        }
+        .toggle-icon::before {
+            content: "▶";
+            margin-right: 8px;
+        }
+        .expanded .toggle-icon::before {
+            content: "▼";
+        }
+    </style>
+    
+    <h1>实例组：<%= groupName %></h1>
+    <p>共 <%= threads.length %> 个线程</p>
+    
+    <% threads.forEach(thread => { %>
+        <div class="thread-card">
+            <div class="thread-header" onclick="toggleStackTrace(this)">
+                <div>
+                    <span class="toggle-icon"></span>
+                    <strong><%= thread.name %></strong>
+                    <span class="state-tag"><%= thread.state %></span>
+                </div>
+            </div>
+            <div class="stack-trace">
+                <pre><%= thread.stack.join('\n') %></pre>
+            </div>
+        </div>
+    <% }) %>
+    
+    <script>
+    function toggleStackTrace(header) {
+        const card = header.parentElement;
+        const trace = card.querySelector('.stack-trace');
+        trace.style.display = trace.style.display === 'none' ? 'block' : 'none';
+        header.classList.toggle('expanded');
+    }
+    </script>
+    <a href="/">返回首页</a>
+</body>
+</html>

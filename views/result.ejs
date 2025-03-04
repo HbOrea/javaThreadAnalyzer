@@ -1,72 +1,308 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>分析结果</title>
+    <title id="page-title">分析结果</title>
     <style>
-        .stats { margin: 20px 0; }
-        .issue { color: red; margin: 10px 0; }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        h2 {
+            color: #3498db;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #2980b9;
+            margin-top: 25px;
+        }
+        h4 {
+            color: #16a085;
+            margin: 0 0 10px 0;
+        }
+        .stats { 
+            margin: 20px 0; 
+        }
+        .issue { 
+            color: #e74c3c; 
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #fadbd8;
+            border-left: 4px solid #e74c3c;
+            border-radius: 4px;
+        }
+        .thread-group {
+            margin: 15px 0;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+        }
+        .thread-group:hover {
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        details {
+            margin: 10px 0;
+        }
+        summary {
+            cursor: pointer;
+            color: #3498db;
+            font-weight: bold;
+        }
+        summary:hover {
+            color: #2980b9;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+        .back-link:hover {
+            background: #2980b9;
+        }
+        .status-count {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .status-item {
+            padding: 10px 15px;
+            border-radius: 4px;
+            background: #f0f0f0;
+            flex-grow: 1;
+            text-align: center;
+        }
+        .status-RUNNABLE { background-color: #d5f5e3; }
+        .status-BLOCKED { background-color: #fadbd8; }
+        .status-WAITING { background-color: #ebdef0; }
+        .status-TIMED_WAITING { background-color: #fdebd0; }
+        .language-switch {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .language-btn {
+            background-color: transparent;
+            color: #3498db;
+            border: 1px solid #3498db;
+            padding: 5px 10px;
+            margin-left: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .language-btn.active {
+            background-color: #3498db;
+            color: white;
+        }
     </style>
 </head>
 <body>
-    <h1>分析结果</h1>
-    
-    <div class="stats">
-        <h2>线程统计</h2>
-        <p>总线程数: <%= analysis.totalThreads %></p>
-        <h3>状态分布</h3>
-        <ul>
-            <% Object.entries(analysis.stateCount).forEach(([state, count]) => { %>
-                <li><strong><%= state %>:</strong> <%= count %> 个线程（占比 <%= (count / analysis.totalThreads * 100).toFixed(1) %>%）</li>
-            <% }) %>
-        </ul>
-        <!-- 原有统计保持不变 -->
-        <h3>线程组统计（Top 10）</h3>
-        <% if (analysis.threadGroups && Object.keys(analysis.threadGroups).length > 0) { %>
-            <% Object.entries(analysis.threadGroups)
-                .sort(([aName, aInfo], [bName, bInfo]) => bInfo.count - aInfo.count)
-                .slice(0, 10)
-                .forEach(([groupName, info]) => { %>
-                <div style="margin: 10px 0; padding: 10px; border: 1px solid #eee;">
-                    <h4><%= groupName %></h4>
-                    <p>线程数量: <%= info.count %>（包含 <%= info.instances.size %> 个实例组）</p>
-                    <% if (info.instances.size > 0) { %>
-                        <details>
-                            <summary>查看实例组</summary>
-                            <ul>
-                                <% Array.from(info.instances).forEach(instance => { %>
-                                    <li>
-                                        <a href="/thread-group/<%= encodeURIComponent(instance) %>" target="_blank">
-                                            <%= instance %>
-                                        </a>
-                                    </li>
-                                <% }) %>
-                            </ul>
-                        </details>
-                    <% } %>
-                    <strong>状态分布:</strong>
-                    <ul>
-                        <% Object.entries(info.states)
-                            .sort(([aState, aCount], [bState, bCount]) => bCount - aCount)
-                            .forEach(([state, count]) => { %>
-                            <li><%= state %>: <%= count %></li>
-                        <% }) %>
-                    </ul>
-                </div>
-            <% }) %>
-        <% } else { %>
-            <p>未检测到线程组</p>
-        <% } %>
+    <div class="container">
+        <!-- 语言切换按钮 -->
+        <div class="language-switch">
+            <button class="language-btn" onclick="switchLanguage('en')" id="en-btn">English</button>
+            <button class="language-btn" onclick="switchLanguage('zh')" id="zh-btn">中文</button>
+        </div>
+        
+        <h1 id="result-title">分析结果</h1>
+        
+        <div class="stats">
+            <h2 id="stats-title">线程统计</h2>
+            <p><strong id="total-threads-label">总线程数:</strong> <%= analysis.totalThreads %></p>
+            
+            <h3 id="state-distribution-title">状态分布</h3>
+            <div class="status-count">
+                <% Object.entries(analysis.stateCount).forEach(([state, count]) => { %>
+                    <div class="status-item status-<%= state %>">
+                        <strong><%= state %></strong><br>
+                        <span class="thread-count-text"><%= count %></span> <span id="threads-text">个线程</span><br>
+                        <small>(<%= (count / analysis.totalThreads * 100).toFixed(1) %>%)</small>
+                    </div>
+                <% }) %>
+            </div>
+            
+            <h3 id="thread-groups-title">线程组统计（Top 10）</h3>
+            <% if (analysis.threadGroups && Object.keys(analysis.threadGroups).length > 0) { %>
+                <% Object.entries(analysis.threadGroups)
+                    .sort(([aName, aInfo], [bName, bInfo]) => bInfo.count - aInfo.count)
+                    .slice(0, 10)
+                    .forEach(([groupName, info]) => { %>
+                    <div class="thread-group">
+                        <h4><%= groupName %></h4>
+                        <p><strong id="thread-count-label">线程数量:</strong> <%= info.count %><span id="instance-groups-text">（包含 <%= info.instances.size %> 个实例组）</span></p>
+                        <% if (info.instances.size > 0) { %>
+                            <details>
+                                <summary id="view-instances-text">查看实例组</summary>
+                                <ul>
+                                    <% Array.from(info.instances).forEach(instance => { %>
+                                        <li>
+                                            <a href="/thread-group/<%= encodeURIComponent(instance) %>" target="_blank">
+                                                <%= instance %>
+                                            </a>
+                                        </li>
+                                    <% }) %>
+                                </ul>
+                            </details>
+                        <% } %>
+                        <strong id="state-distribution-label">状态分布:</strong>
+                        <ul>
+                            <% Object.entries(info.states)
+                                .sort(([aState, aCount], [bState, bCount]) => bCount - aCount)
+                                .forEach(([state, count]) => { %>
+                                <li><%= state %>: <%= count %></li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p id="no-thread-groups-text">未检测到线程组</p>
+            <% } %>
+        </div>
+
+        <div class="issues">
+            <h2 id="potential-issues-title">潜在问题</h2>
+            <% if (analysis.potentialIssues.length === 0) { %>
+                <p id="no-issues-text">未发现明显问题</p>
+            <% } else { %>
+                <% analysis.potentialIssues.forEach(issue => { %>
+                    <div class="issue"><%= issue %></div>
+                <% }) %>
+            <% } %>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="/" class="back-link" id="back-link">← 返回首页</a>
+        </div>
     </div>
 
-    <div class="issues">
-        <h2>潜在问题</h2>
-        <% if (analysis.potentialIssues.length === 0) { %>
-            <p>未发现明显问题</p>
-        <% } else { %>
-            <% analysis.potentialIssues.forEach(issue => { %>
-                <div class="issue"><%= issue %></div>
-            <% }) %>
-        <% } %>
-    </div>
+    <script>
+        // 初始化语言设置
+        function initLanguage() {
+            // 从本地存储获取语言设置，默认为英文
+            const lang = localStorage.getItem('preferredLanguage') || 'en';
+            switchLanguage(lang);
+        }
+
+        // 切换语言
+        function switchLanguage(lang) {
+            // 保存语言偏好
+            localStorage.setItem('preferredLanguage', lang);
+            
+            // 更新UI
+            if (lang === 'en') {
+                document.getElementById('en-btn').classList.add('active');
+                document.getElementById('zh-btn').classList.remove('active');
+                document.getElementById('page-title').innerText = 'Analysis Results';
+                document.getElementById('result-title').innerText = 'Analysis Results';
+                document.getElementById('stats-title').innerText = 'Thread Statistics';
+                document.getElementById('total-threads-label').innerText = 'Total Threads:';
+                document.getElementById('state-distribution-title').innerText = 'State Distribution';
+                document.getElementById('thread-groups-title').innerText = 'Thread Groups (Top 10)';
+                document.getElementById('potential-issues-title').innerText = 'Potential Issues';
+                document.getElementById('back-link').innerText = '← Back to Home';
+                
+                // 更新所有线程数量文本
+                document.querySelectorAll('.thread-count-text').forEach(el => {
+                    el.nextElementSibling.innerText = ' threads';
+                });
+                
+                // 更新其他标签
+                if (document.getElementById('no-thread-groups-text')) {
+                    document.getElementById('no-thread-groups-text').innerText = 'No thread groups detected';
+                }
+                if (document.getElementById('no-issues-text')) {
+                    document.getElementById('no-issues-text').innerText = 'No obvious issues found';
+                }
+                
+                // 更新所有实例组文本
+                document.querySelectorAll('#thread-count-label').forEach(el => {
+                    el.innerText = 'Thread Count:';
+                });
+                document.querySelectorAll('#instance-groups-text').forEach(el => {
+                    const count = el.innerText.match(/\d+/)[0];
+                    el.innerText = ` (contains ${count} instance groups)`;
+                });
+                document.querySelectorAll('#view-instances-text').forEach(el => {
+                    el.innerText = 'View Instance Groups';
+                });
+                document.querySelectorAll('#state-distribution-label').forEach(el => {
+                    el.innerText = 'State Distribution:';
+                });
+            } else {
+                document.getElementById('en-btn').classList.remove('active');
+                document.getElementById('zh-btn').classList.add('active');
+                document.getElementById('page-title').innerText = '分析结果';
+                document.getElementById('result-title').innerText = '分析结果';
+                document.getElementById('stats-title').innerText = '线程统计';
+                document.getElementById('total-threads-label').innerText = '总线程数:';
+                document.getElementById('state-distribution-title').innerText = '状态分布';
+                document.getElementById('thread-groups-title').innerText = '线程组统计（Top 10）';
+                document.getElementById('potential-issues-title').innerText = '潜在问题';
+                document.getElementById('back-link').innerText = '← 返回首页';
+                
+                // 更新所有线程数量文本
+                document.querySelectorAll('.thread-count-text').forEach(el => {
+                    el.nextElementSibling.innerText = ' 个线程';
+                });
+                
+                // 更新其他标签
+                if (document.getElementById('no-thread-groups-text')) {
+                    document.getElementById('no-thread-groups-text').innerText = '未检测到线程组';
+                }
+                if (document.getElementById('no-issues-text')) {
+                    document.getElementById('no-issues-text').innerText = '未发现明显问题';
+                }
+                
+                // 更新所有实例组文本
+                document.querySelectorAll('#thread-count-label').forEach(el => {
+                    el.innerText = '线程数量:';
+                });
+                document.querySelectorAll('#instance-groups-text').forEach(el => {
+                    const count = el.innerText.match(/\d+/)[0];
+                    el.innerText = `（包含 ${count} 个实例组）`;
+                });
+                document.querySelectorAll('#view-instances-text').forEach(el => {
+                    el.innerText = '查看实例组';
+                });
+                document.querySelectorAll('#state-distribution-label').forEach(el => {
+                    el.innerText = '状态分布:';
+                });
+            }
+        }
+
+        // 页面加载时初始化语言
+        window.onload = initLanguage;
+    </script>
 </body>
 </html>

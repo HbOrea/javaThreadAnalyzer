@@ -10,8 +10,10 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 // 首页路由
+// 在路由处理中添加语言参数支持
 app.get('/', (req, res) => {
-    res.render('index');
+    const lang = req.query.lang || 'en'; // 默认英文
+    res.render('index', { lang });
 });
 
 // 文件分析路由

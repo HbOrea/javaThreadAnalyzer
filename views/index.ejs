@@ -1,13 +1,259 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JStack 分析工具</title>
+    <title>JStack Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .intro-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        .intro-section h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .intro-section h3 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+        .code-block {
+            background: #f4f6f8;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        .upload-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .hint {
+            color: #666;
+            font-size: 0.9em;
+            margin: 5px 0 15px 0;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .language-switch {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .language-btn {
+            background-color: transparent;
+            color: #3498db;
+            border: 1px solid #3498db;
+            padding: 5px 10px;
+            margin-left: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .language-btn.active {
+            background-color: #3498db;
+            color: white;
+        }
+        .file-input {
+            position: relative;
+            margin-bottom: 10px;
+        }
+        .file-input input[type="file"] {
+            position: absolute;
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            z-index: -1;
+        }
+        .file-input-label {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .file-input-label:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
 </head>
 <body>
-    <h1>上传JStack文件</h1>
-    <form action="/analyze" method="post" enctype="multipart/form-data">
-        <input type="file" name="jstackFile" accept=".txt">
-        <button type="submit">分析</button>
-    </form>
+    <div class="container">
+        <!-- 语言切换按钮 -->
+        <div class="language-switch">
+            <button class="language-btn" onclick="switchLanguage('en')" id="en-btn">English</button>
+            <button class="language-btn" onclick="switchLanguage('zh')" id="zh-btn">中文</button>
+        </div>
+
+        <div class="intro-section">
+            <!-- 英文版内容 -->
+            <div id="en-content">
+                <h2>Java Thread Dump Analyzer</h2>
+                
+                <h3>What is a Thread Dump?</h3>
+                <p>A Thread Dump is a snapshot of the Java virtual machine's threads at runtime, recording the state of all current threads. It's particularly useful for analyzing:</p>
+                <ul>
+                    <li>Thread deadlocks</li>
+                    <li>Thread blocking</li>
+                    <li>Performance bottlenecks</li>
+                    <li>Resource contention</li>
+                </ul>
+
+                <h3>How to Get a Thread Dump?</h3>
+                <p>Use the jstack command to capture a thread dump from a running Java program:</p>
+                <div class="code-block">
+                    jstack [process-id] > thread-dump.txt
+                </div>
+                <p>Or use the following command to find Java process IDs:</p>
+                <div class="code-block">
+                    jps -l
+                </div>
+
+                <h3>Important Information in Thread Dumps</h3>
+                <ul>
+                    <li><strong>Thread States</strong>: RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, etc.</li>
+                    <li><strong>Thread Names</strong>: Reflect the purpose and source of threads</li>
+                    <li><strong>Thread Priority</strong>: Affects thread scheduling</li>
+                    <li><strong>Stack Traces</strong>: Show the current execution path of threads</li>
+                    <li><strong>Lock Information</strong>: Display locks held and waited for by threads</li>
+                </ul>
+
+                <h3>Common Issue Analysis</h3>
+                <ul>
+                    <li><strong>Deadlock Detection</strong>: Find threads waiting for each other's resources</li>
+                    <li><strong>Resource Contention</strong>: Multiple threads waiting for the same lock</li>
+                    <li><strong>Thread Pool Analysis</strong>: Check thread pool usage patterns</li>
+                    <li><strong>Performance Issues</strong>: Identify time-consuming operations and blocking points</li>
+                </ul>
+            </div>
+
+            <!-- 中文版内容 -->
+            <div id="zh-content" style="display: none;">
+                <h2>Java Thread Dump 分析工具</h2>
+                
+                <h3>什么是 Thread Dump？</h3>
+                <p>Thread Dump 是 Java 虚拟机在运行时的线程快照，记录了当前所有线程的运行状态。它对于分析以下问题特别有用：</p>
+                <ul>
+                    <li>线程死锁</li>
+                    <li>线程阻塞</li>
+                    <li>性能瓶颈</li>
+                    <li>资源争用</li>
+                </ul>
+
+                <h3>如何获取 Thread Dump？</h3>
+                <p>使用 jstack 命令可以获取运行中的 Java 程序的线程快照：</p>
+                <div class="code-block">
+                    jstack [进程ID] > thread-dump.txt
+                </div>
+                <p>或者使用以下命令查找 Java 进程 ID：</p>
+                <div class="code-block">
+                    jps -l
+                </div>
+
+                <h3>Thread Dump 中的重要信息</h3>
+                <ul>
+                    <li><strong>线程状态</strong>：RUNNABLE、BLOCKED、WAITING、TIMED_WAITING 等</li>
+                    <li><strong>线程名称</strong>：反映线程的用途和来源</li>
+                    <li><strong>线程优先级</strong>：影响线程调度</li>
+                    <li><strong>调用栈</strong>：显示线程当前的执行路径</li>
+                    <li><strong>锁信息</strong>：显示线程持有和等待的锁</li>
+                </ul>
+
+                <h3>常见问题分析</h3>
+                <ul>
+                    <li><strong>死锁检测</strong>：查找互相等待资源的线程</li>
+                    <li><strong>资源竞争</strong>：多个线程等待同一把锁</li>
+                    <li><strong>线程池分析</strong>：检查线程池的使用情况</li>
+                    <li><strong>性能问题</strong>：识别耗时操作和阻塞点</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <h2 id="start-analysis-title">Start Analysis</h2>
+            <form class="upload-form" action="/analyze" method="post" enctype="multipart/form-data">
+                <div class="file-input">
+                    <input type="file" name="jstackFile" accept=".txt" id="file-input">
+                    <label for="file-input" id="file-input-label" class="file-input-label">Choose File</label>
+                </div>
+                <div class="hint" id="file-hint">
+                    Please select a .txt file generated by the jstack command
+                </div>
+                <button type="submit" id="analyze-btn">Analyze</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 初始化语言设置
+        function initLanguage() {
+            // 从本地存储获取语言设置，默认为英文
+            const lang = localStorage.getItem('preferredLanguage') || 'en';
+            switchLanguage(lang);
+        }
+
+        // 切换语言
+        function switchLanguage(lang) {
+            // 保存语言偏好
+            localStorage.setItem('preferredLanguage', lang);
+            
+            // 更新UI
+            if (lang === 'en') {
+                document.getElementById('en-content').style.display = 'block';
+                document.getElementById('zh-content').style.display = 'none';
+                document.getElementById('en-btn').classList.add('active');
+                document.getElementById('zh-btn').classList.remove('active');
+                document.getElementById('start-analysis-title').innerText = 'Start Analysis';
+                document.getElementById('file-hint').innerText = 'Please select a .txt file generated by the jstack command';
+                document.getElementById('analyze-btn').innerText = 'Analyze';
+                document.getElementById('file-input-label').innerText = 'Choose File';
+            } else {
+                document.getElementById('en-content').style.display = 'none';
+                document.getElementById('zh-content').style.display = 'block';
+                document.getElementById('en-btn').classList.remove('active');
+                document.getElementById('zh-btn').classList.add('active');
+                document.getElementById('start-analysis-title').innerText = '开始分析';
+                document.getElementById('file-hint').innerText = '请选择通过 jstack 命令生成的 .txt 文件';
+                document.getElementById('analyze-btn').innerText = '开始分析';
+                document.getElementById('file-input-label').innerText = '选择文件';
+            }
+        }
+
+        // 页面加载时初始化语言
+        window.onload = initLanguage;
+    </script>
 </body>
 </html>

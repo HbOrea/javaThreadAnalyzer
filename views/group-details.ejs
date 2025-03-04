@@ -3,65 +3,195 @@
 <head>
     <title><%= groupName %> 详情</title>
     <style>
-        .thread-detail { margin: 15px 0; padding: 10px; border: 1px solid #ddd; }
-        .stack-trace { background: #f5f5f5; padding: 10px; margin-top: 5px; }
-    </style>
-</head>
-<body>
-    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
         .thread-card {
             margin: 15px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            overflow: hidden;
         }
         .thread-header {
-            padding: 10px;
-            background: #f5f5f5;
+            padding: 12px 15px;
+            background: #f9f9f9;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: background 0.2s;
+        }
+        .thread-header:hover {
+            background: #f0f0f0;
         }
         .stack-trace {
-            padding: 10px;
+            padding: 15px;
             background: white;
             display: none;
+            border-top: 1px solid #eee;
         }
         .toggle-icon::before {
             content: "▶";
             margin-right: 8px;
+            color: #3498db;
         }
         .expanded .toggle-icon::before {
             content: "▼";
+            color: #2980b9;
+        }
+        .state-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+        .state-RUNNABLE { background-color: #d5f5e3; }
+        .state-BLOCKED { background-color: #fadbd8; }
+        .state-WAITING { background-color: #ebdef0; }
+        .state-TIMED_WAITING { background-color: #fdebd0; }
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            font-family: Consolas, monospace;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+        .back-link:hover {
+            background: #2980b9;
+        }
+        .thread-count {
+            background: #f0f0f0;
+            padding: 10px 15px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        .language-switch {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .language-btn {
+            background-color: transparent;
+            color: #3498db;
+            border: 1px solid #3498db;
+            padding: 5px 10px;
+            margin-left: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .language-btn.active {
+            background-color: #3498db;
+            color: white;
         }
     </style>
-    
-    <h1>实例组：<%= groupName %></h1>
-    <p>共 <%= threads.length %> 个线程</p>
-    
-    <% threads.forEach(thread => { %>
-        <div class="thread-card">
-            <div class="thread-header" onclick="toggleStackTrace(this)">
-                <div>
-                    <span class="toggle-icon"></span>
-                    <strong><%= thread.name %></strong>
-                    <span class="state-tag"><%= thread.state %></span>
+</head>
+<body>
+    <div class="container">
+        <!-- 语言切换按钮 -->
+        <div class="language-switch">
+            <button class="language-btn" onclick="switchLanguage('en')" id="en-btn">English</button>
+            <button class="language-btn" onclick="switchLanguage('zh')" id="zh-btn">中文</button>
+        </div>
+        
+        <h1><span id="instance-group-label">实例组：</span><%= groupName %></h1>
+        <p><span id="total-threads-label">共</span> <%= threads.length %> <span id="threads-text">个线程</span></p>
+        
+        <% threads.forEach(thread => { %>
+            <div class="thread-card">
+                <div class="thread-header" onclick="toggleStackTrace(this)">
+                    <div>
+                        <span class="toggle-icon"></span>
+                        <strong><%= thread.name %></strong>
+                        <span class="state-tag state-<%= thread.state %>"><%= thread.state %></span>
+                    </div>
+                </div>
+                <div class="stack-trace">
+                    <pre><%= thread.stack.join('\n') %></pre>
                 </div>
             </div>
-            <div class="stack-trace">
-                <pre><%= thread.stack.join('\n') %></pre>
-            </div>
+        <% }) %>
+        
+        <div style="text-align: center;">
+            <a href="/" class="back-link" id="back-link">← 返回首页</a>
         </div>
-    <% }) %>
-    
+    </div>
     <script>
-    function toggleStackTrace(header) {
-        const card = header.parentElement;
-        const trace = card.querySelector('.stack-trace');
-        trace.style.display = trace.style.display === 'none' ? 'block' : 'none';
-        header.classList.toggle('expanded');
-    }
+        function toggleStackTrace(header) {
+            const card = header.parentElement;
+            const trace = card.querySelector('.stack-trace');
+            
+            // 修复：检查当前显示状态，如果是 none 或空字符串，则显示，否则隐藏
+            const isHidden = trace.style.display === 'none' || trace.style.display === '';
+            trace.style.display = isHidden ? 'block' : 'none';
+            
+            header.classList.toggle('expanded');
+        }
+        
+        // 初始化语言设置
+        function initLanguage() {
+            // 从本地存储获取语言设置，默认为英文
+            const lang = localStorage.getItem('preferredLanguage') || 'en';
+            switchLanguage(lang);
+        }
+
+        // 切换语言
+        function switchLanguage(lang) {
+            // 保存语言偏好
+            localStorage.setItem('preferredLanguage', lang);
+            
+            // 更新UI
+            if (lang === 'en') {
+                document.getElementById('en-btn').classList.add('active');
+                document.getElementById('zh-btn').classList.remove('active');
+                document.title = '<%= groupName %> Details';
+                document.getElementById('instance-group-label').innerText = 'Instance Group: ';
+                document.getElementById('total-threads-label').innerText = 'Total ';
+                document.getElementById('threads-text').innerText = ' threads';
+                document.getElementById('back-link').innerText = '← Back to Home';
+            } else {
+                document.getElementById('en-btn').classList.remove('active');
+                document.getElementById('zh-btn').classList.add('active');
+                document.title = '<%= groupName %> 详情';
+                document.getElementById('instance-group-label').innerText = '实例组：';
+                document.getElementById('total-threads-label').innerText = '共 ';
+                document.getElementById('threads-text').innerText = ' 个线程';
+                document.getElementById('back-link').innerText = '← 返回首页';
+            }
+        }
+
+        // 页面加载时初始化语言
+        window.onload = initLanguage;
     </script>
-    <a href="/">返回首页</a>
 </body>
 </html>

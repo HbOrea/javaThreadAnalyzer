@@ -2,11 +2,11 @@ const express = require('express');
 const multer = require('multer');
 const fs = require('fs');
 const app = express();
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ storage: multer.memoryStorage() });
 let analysisCache = null;
-
-// 中间件设置
-app.use(express.static('public'));
+const path = require('path');
+// 配置视图路径
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // 首页路由
@@ -22,7 +22,8 @@ app.post('/analyze', upload.single('jstackFile'), (req, res) => {
         return res.status(400).send('No file uploaded');
     }
 
-    const content = fs.readFileSync(req.file.path, 'utf8');
+    // 修改文件处理逻辑，直接从内存读取
+    const content = req.file.buffer.toString('utf8');
     const analysis = analyzeJstack(content);
     analysisCache = analysis; // 缓存分析结果
     

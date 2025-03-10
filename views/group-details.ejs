@@ -72,8 +72,10 @@
         pre {
             margin: 0;
             white-space: pre-wrap;
+            overflow-wrap: break-word;
             font-family: Consolas, monospace;
             font-size: 0.9em;
+            max-width: 100%;
         }
         .back-link {
             display: inline-block;
@@ -137,7 +139,7 @@
                     </div>
                 </div>
                 <div class="stack-trace">
-                    <pre><%= thread.stack.join('\n') %></pre>
+                    <pre class="full-stack"><%- thread.stack.join('\n') %></pre>
                 </div>
             </div>
         <% }) %>

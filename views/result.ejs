@@ -135,7 +135,12 @@
             <button class="language-btn" onclick="switchLanguage('zh')" id="zh-btn">中文</button>
         </div>
         
-        <h1 id="result-title">分析结果</h1>
+        <h1 id="result-title">Analysis Results</h1>
+        
+        <div id="analyzed-file">
+            <span id="file-label">Analyzed File:</span>
+            <span id="file-name"><%= analysis.fileName %></span>
+        </div>
         
         <div class="stats">
             <h2 id="stats-title">线程统计</h2>
@@ -286,6 +291,7 @@
                 
                 // 更新所有实例组文本
                 document.querySelectorAll('#thread-count-label').forEach(el => {
+                    document.getElementById('file-label').innerText = 'Analyzed File:';
                     el.innerText = '线程数量:';
                 });
                 document.querySelectorAll('#instance-groups-text').forEach(el => {

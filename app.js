@@ -1,6 +1,5 @@
 const express = require('express');
 const multer = require('multer');
-const fs = require('fs');
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 let analysisCache = null;
@@ -26,9 +25,7 @@ app.post('/analyze', upload.single('jstackFile'), (req, res) => {
     const content = req.file.buffer.toString('utf8');
     const analysis = analyzeJstack(content);
     analysisCache = analysis; // 缓存分析结果
-    
-    // 清理上传文件
-    fs.unlinkSync(req.file.path);
+    analysis.fileName = req.file.originalname; // 新增文件名字段
 
     res.render('result', { analysis });
 });

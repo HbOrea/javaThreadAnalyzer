@@ -7,6 +7,8 @@ const path = require('path');
 // 配置视图路径
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+// 配置静态文件服务
+app.use(express.static(path.join(__dirname, 'public')));
 
 // 首页路由
 // 在路由处理中添加语言参数支持

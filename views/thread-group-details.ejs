@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= groupName %> 详情</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title"><%= groupName %> 详情</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,6 +20,7 @@
             padding: 25px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
         }
         h1 {
             color: #2c3e50;
@@ -25,6 +28,29 @@
             padding-bottom: 10px;
             margin-top: 0;
         }
+        .stats-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        .state-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .state-item {
+            padding: 10px 15px;
+            border-radius: 4px;
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+        }
+        .state-RUNNABLE { background-color: #d5f5e3; }
+        .state-BLOCKED { background-color: #fadbd8; }
+        .state-WAITING { background-color: #ebdef0; }
+        .state-TIMED_WAITING { background-color: #fdebd0; }
         .thread-card {
             margin: 15px 0;
             border: 1px solid #eee;
@@ -65,10 +91,6 @@
             font-size: 0.85em;
             margin-left: 10px;
         }
-        .state-RUNNABLE { background-color: #d5f5e3; }
-        .state-BLOCKED { background-color: #fadbd8; }
-        .state-WAITING { background-color: #ebdef0; }
-        .state-TIMED_WAITING { background-color: #fdebd0; }
         pre {
             margin: 0;
             white-space: pre-wrap;
@@ -90,13 +112,6 @@
         .back-link:hover {
             background: #2980b9;
         }
-        .thread-count {
-            background: #f0f0f0;
-            padding: 10px 15px;
-            border-radius: 4px;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
         .language-switch {
             position: absolute;
             top: 10px;
@@ -117,7 +132,16 @@
             color: white;
         }
         /* 移除搜索框样式 */
-        
+        /*
+        .search-box {
+            margin: 15px 0;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        */
     </style>
 </head>
 <body>
@@ -128,11 +152,35 @@
             <button class="language-btn" onclick="switchLanguage('zh')" id="zh-btn">中文</button>
         </div>
         
-        <h1><span id="instance-group-label">实例组：</span><%= groupName %></h1>
-        <p><span id="total-threads-label">共</span> <%= threads.length %> <span id="threads-text">个线程</span></p>
+        <h1><span id="thread-group-label">线程组：</span><%= groupName %></h1>
+        
+        <!-- 状态统计部分 -->
+        <div class="stats-section">
+            <h2 id="stats-title">状态统计</h2>
+            <p><span id="total-threads-label">总线程数：</span><%= threads.length %></p>
+            
+            <div class="state-summary">
+                <% 
+                const stateCount = {};
+                threads.forEach(thread => {
+                    stateCount[thread.state] = (stateCount[thread.state] || 0) + 1;
+                });
+                
+                Object.entries(stateCount).forEach(([state, count]) => { 
+                %>
+                    <div class="state-item state-<%= state %>">
+                        <strong><%= state %></strong><br>
+                        <span><%= count %></span> <span id="threads-count-text-<%= state %>">个线程</span><br>
+                        <small>(<%= (count / threads.length * 100).toFixed(1) %>%)</small>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
         
         <!-- 移除搜索框 -->
         
+        <!-- 线程列表 -->
+        <h2 id="threads-list-title">线程列表</h2>
         <% threads.forEach(thread => { %>
             <div class="thread-card">
                 <div class="thread-header" onclick="toggleStackTrace(this)">
@@ -153,6 +201,7 @@
             <a href="/" class="back-link" id="back-link">← 返回首页</a>
         </div>
     </div>
+    
     <script>
         function toggleStackTrace(header) {
             const card = header.parentElement;
@@ -164,6 +213,25 @@
             
             header.classList.toggle('expanded');
         }
+        
+        // 移除搜索线程功能
+        /*
+        function searchThreads() {
+            const searchText = document.getElementById('threadSearch').value.toLowerCase();
+            const threadCards = document.querySelectorAll('.thread-card');
+            
+            threadCards.forEach(card => {
+                const threadName = card.querySelector('strong').textContent.toLowerCase();
+                const stackTrace = card.querySelector('.full-stack').textContent.toLowerCase();
+                
+                if (threadName.includes(searchText) || stackTrace.includes(searchText)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        */
         
         // 初始化语言设置
         function initLanguage() {
@@ -181,33 +249,37 @@
             if (lang === 'en') {
                 document.getElementById('en-btn').classList.add('active');
                 document.getElementById('zh-btn').classList.remove('active');
-                document.title = '<%= groupName %> Details';
-                document.getElementById('instance-group-label').innerText = 'Instance Group: ';
-                document.getElementById('total-threads-label').innerText = 'Total ';
-                document.getElementById('threads-text').innerText = ' threads';
+                document.title = '<%= groupName %> Thread Group Details';
+                document.getElementById('thread-group-label').innerText = 'Thread Group: ';
+                document.getElementById('stats-title').innerText = 'State Statistics';
+                document.getElementById('total-threads-label').innerText = 'Total Threads: ';
+                document.getElementById('threads-list-title').innerText = 'Thread List';
+                // 移除搜索框相关翻译
+                // document.getElementById('threadSearch').placeholder = 'Search threads...';
+                document.getElementById('back-to-results').innerText = '← Back to Results';
                 document.getElementById('back-link').innerText = '← Back to Home';
                 
-                // 添加返回结果页链接的翻译
-                if (document.getElementById('back-to-results')) {
-                    document.getElementById('back-to-results').innerText = '← Back to Results';
-                }
-                
-                // 移除搜索框相关的翻译
+                // 更新所有线程数量文本
+                document.querySelectorAll('[id^="threads-count-text-"]').forEach(el => {
+                    el.innerText = ' threads';
+                });
             } else {
                 document.getElementById('en-btn').classList.remove('active');
                 document.getElementById('zh-btn').classList.add('active');
-                document.title = '<%= groupName %> 详情';
-                document.getElementById('instance-group-label').innerText = '实例组：';
-                document.getElementById('total-threads-label').innerText = '共 ';
-                document.getElementById('threads-text').innerText = ' 个线程';
+                document.title = '<%= groupName %> 线程组详情';
+                document.getElementById('thread-group-label').innerText = '线程组：';
+                document.getElementById('stats-title').innerText = '状态统计';
+                document.getElementById('total-threads-label').innerText = '总线程数：';
+                document.getElementById('threads-list-title').innerText = '线程列表';
+                // 移除搜索框相关翻译
+                // document.getElementById('threadSearch').placeholder = '搜索线程...';
+                document.getElementById('back-to-results').innerText = '← 返回结果页';
                 document.getElementById('back-link').innerText = '← 返回首页';
                 
-                // 添加返回结果页链接的翻译
-                if (document.getElementById('back-to-results')) {
-                    document.getElementById('back-to-results').innerText = '← 返回结果页';
-                }
-                
-                // 移除搜索框相关的翻译
+                // 更新所有线程数量文本
+                document.querySelectorAll('[id^="threads-count-text-"]').forEach(el => {
+                    el.innerText = ' 个线程';
+                });
             }
         }
 
@@ -221,16 +293,5 @@
             });
         };
     </script>
-    <div style="display: none;">
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-CT1MXSWBWX"></script>
-        <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-CT1MXSWBWX');
-        </script>
-    </div>
 </body>
 </html>

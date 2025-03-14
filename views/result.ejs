@@ -166,6 +166,10 @@
                     <div class="thread-group">
                         <h4><%= groupName %></h4>
                         <p><strong id="thread-count-label">线程数量:</strong> <%= info.count %><span id="instance-groups-text">（包含 <%= info.instances.size %> 个实例组）</span></p>
+                         <!-- 添加详情页链接 -->
+                        <a href="/thread-group-details/<%= encodeURIComponent(groupName) %>" class="group-details-link" id="group-details-link-<%= groupName.replace(/\s+/g, '-') %>">
+                            <span class="details-text">查看详情</span>
+                        </a>
                         <% if (info.instances.size > 0) { %>
                             <details>
                                 <summary id="view-instances-text">查看实例组</summary>
@@ -264,6 +268,10 @@
                 document.querySelectorAll('#state-distribution-label').forEach(el => {
                     el.innerText = 'State Distribution:';
                 });
+                // 更新所有详情链接文本
+                document.querySelectorAll('.details-text').forEach(el => {
+                    el.innerText = 'View Details';
+                });
             } else {
                 document.getElementById('en-btn').classList.remove('active');
                 document.getElementById('zh-btn').classList.add('active');
@@ -303,6 +311,10 @@
                 });
                 document.querySelectorAll('#state-distribution-label').forEach(el => {
                     el.innerText = '状态分布:';
+                });
+                 // 更新所有详情链接文本
+                document.querySelectorAll('.details-text').forEach(el => {
+                    el.innerText = '查看详情';
                 });
             }
         }

@@ -4,6 +4,20 @@ const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 let analysisCache = null;
 const path = require('path');
+
+// 添加一个全局变量来存储最新的分析结果
+let latestAnalysis = null;
+
+// 保存分析结果到缓存
+function saveAnalysisToCache(analysis) {
+    latestAnalysis = analysis;
+}
+
+// 从缓存获取分析结果
+function getAnalysisFromCache() {
+    return latestAnalysis;
+}
+
 // 配置视图路径
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -28,6 +42,9 @@ app.post('/analyze', upload.single('jstackFile'), (req, res) => {
     const analysis = analyzeJstack(content);
     analysisCache = analysis; // 缓存分析结果
     analysis.fileName = req.file.originalname; // 新增文件名字段
+
+     // 分析完成后保存结果
+     saveAnalysisToCache(analysis);
 
     res.render('result', { analysis });
 });
@@ -158,6 +175,46 @@ function getGroupThreads(groupName) {
         ]
     }];
 }
+
+// 添加线程组详情页路由
+app.get('/thread-group-details/:groupName', (req, res) => {
+    const groupName = req.params.groupName;
+    
+    // 从缓存中获取分析结果
+    const analysis = getAnalysisFromCache();
+    if (!analysis) {
+        return res.redirect('/');
+    }
+    
+    // 获取指定线程组的所有线程
+    const threads = [];
+    if (analysis.threadGroups && analysis.threadGroups[groupName]) {
+        // 遍历所有实例组
+        Array.from(analysis.threadGroups[groupName].instances).forEach(instance => {
+            // 查找该实例组的所有线程
+            const instanceThreads = analysis.threads.filter(thread => 
+                thread.name.includes(instance)
+            );
+            threads.push(...instanceThreads);
+        });
+    }
+    
+    res.render('thread-group-details', { 
+        groupName, 
+        threads 
+    });
+});
+
+// 添加返回分析结果页的路由
+app.get('/analyze-results', (req, res) => {
+    // 从缓存中获取分析结果
+    const analysis = getAnalysisFromCache();
+    if (!analysis) {
+        return res.redirect('/');
+    }
+    
+    res.render('result', { analysis });
+});
 
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');

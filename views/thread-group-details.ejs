@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title"><%= groupName %> 详情</title>
+    <!-- 添加以下 meta 标签确保页面可被索引 -->
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="<%= groupName %> 线程组详细分析，包含线程状态统计和堆栈信息">
+    <link rel="canonical" href="https://www.threadanalyzer.online/thread-group-details/<%= encodeURIComponent(groupName) %>">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4671540604964967"
      crossorigin="anonymous"></script>
     <style>

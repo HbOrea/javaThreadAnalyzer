@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /group-details/
+Disallow: /thread-group/
+Disallow: /thread-group-details/
 
-# 允许所有页面被索引
 Sitemap: https://www.threadanalyzer.online/sitemap.xml

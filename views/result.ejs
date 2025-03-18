@@ -132,6 +132,28 @@
             background-color: #3498db;
             color: white;
         }
+        /* 美化查看详情按钮 */
+        .group-details-link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 15px;
+            background: #3498db;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .group-details-link:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .details-icon {
+            margin-left: 5px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -173,9 +195,10 @@
                     <div class="thread-group">
                         <h4><%= groupName %></h4>
                         <p><strong id="thread-count-label">线程数量:</strong> <%= info.count %><span id="instance-groups-text">（包含 <%= info.instances.size %> 个实例组）</span></p>
-                         <!-- 添加详情页链接 -->
+                         <!-- 修改详情页链接样式 -->
                         <a href="/thread-group-details/<%= encodeURIComponent(groupName) %>" class="group-details-link" id="group-details-link-<%= groupName.replace(/\s+/g, '-') %>">
                             <span class="details-text">查看详情</span>
+                            <span class="details-icon">→</span>
                         </a>
                         <% if (info.instances.size > 0) { %>
                             <details>
@@ -270,7 +293,7 @@
                     el.innerText = ` (contains ${count} instance groups)`;
                 });
                 document.querySelectorAll('#view-instances-text').forEach(el => {
-                    el.innerText = 'View Instance Groups';
+                    el.innerText = 'Threads in this group:';
                 });
                 document.querySelectorAll('#state-distribution-label').forEach(el => {
                     el.innerText = 'State Distribution:';
@@ -314,7 +337,7 @@
                     el.innerText = `（包含 ${count} 个实例组）`;
                 });
                 document.querySelectorAll('#view-instances-text').forEach(el => {
-                    el.innerText = '查看实例组';
+                    el.innerText = '查看组内线程';
                 });
                 document.querySelectorAll('#state-distribution-label').forEach(el => {
                     el.innerText = '状态分布:';

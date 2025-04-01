@@ -49,6 +49,10 @@ app.post('/analyze', upload.single('jstackFile'), (req, res) => {
     res.render('result', { analysis });
 });
 
+app.get('/privacy-policy', (req, res) => {
+    res.render('privacy-policy');
+});
+
 // 分析函数
 function analyzeJstack(content) {
     const threads = [];

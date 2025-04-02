@@ -53,6 +53,10 @@ app.get('/privacy-policy', (req, res) => {
     res.render('privacy-policy');
 });
 
+app.get('/terms-of-service', (req, res) => {
+    res.render('terms-of-service');
+});
+
 // 分析函数
 function analyzeJstack(content) {
     const threads = [];

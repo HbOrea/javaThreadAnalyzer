@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - Java Thread Dump Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        .language-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .language-btn {
+            background-color: transparent;
+            color: #3498db;
+            border: 1px solid #3498db;
+            padding: 5px 10px;
+            margin-left: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .language-btn.active {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .language-btn:hover:not(.active) {
+            background-color: #f5f5f5;
+        }
+
+        .en-version,
+        .zh-version {
+            display: none;
+        }
+
+        .en-version.active,
+        .zh-version.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-switch">
+            <button class="language-btn active" onclick="switchLanguage('en')">English</button>
+            <button class="language-btn" onclick="switchLanguage('zh')">中文</button>
+        </div>
+
+        <div class="en-version active">
+            <h1>Terms of Service</h1>
+            <div class="section">
+                <h2 class="section-title">I. Introduction</h2>
+                <p>Welcome to threadanalyzer.online. By accessing or using threadanalyzer.online, you agree to comply with and be bound by these Terms of Service (https://www.threadanalyzer.online/privacy-policy). This agreement applies to all types of users.</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">II. Acceptance of Terms</h2>
+                <p>By using this platform, you confirm that you have read, understood, and agreed to these terms. If you disagree, please discontinue use of the platform.</p>
+                <p>You must meet certain age requirements, typically being at least 13 years old.</p>
+                <p>This agreement may include other related policies (such as the Privacy Policy), which together form the framework of rules for your use of the platform.</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">III. Modifications to Agreement</h2>
+                <p>We reserve the right to update these terms at any time.</p>
+                <p>Modified terms will be posted in a prominent location on the platform, and your continued use of the platform constitutes acceptance of the new terms. We recommend checking for updates regularly.</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">IV. Eligibility</h2>
+                <p>Age Restriction: You must be at least 13 years old to use the platform.</p>
+                <p>Legal Compliance: Using the platform confirms your compliance with the terms of service of related platform partners (if any) and all applicable laws and regulations.</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">V. User Information</h2>
+                <p>We collect your name, email address, and payment information to process orders on our website.</p>
+                <p>We also collect non-personal data through the use of cookies.</p>
+                <p>Our Privacy Policy explains how we use and protect your information.</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">VI. User Responsibilities</h2>
+                <p>Legal Use: Do not use the platform for illegal purposes or violate any applicable laws, regulations, or third-party rights.</p>
+                <p>Content Standards: Prohibited from uploading, posting, or transmitting harmful, infringing, fraudulent, abusive, or defamatory content, including but not limited to viruses, spam, or materials that infringe intellectual property rights.</p>
+                <p>Behavioral Standards: Do not engage in activities that interfere with the platform's normal operation, such as data scraping, reverse engineering, or malicious attacks; do not impersonate others; do not use the platform for activities inconsistent with its purpose.</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">VII. User Generated Content</h2>
+                <p>Ownership: You retain ownership of content you submit to the platform.</p>
+                <p>License Grant: You grant us a non-exclusive, worldwide, royalty-free, sublicensable, and transferable license to use, copy, distribute, display, and perform the content for platform operation and improvement purposes.</p>
+                <p>Responsibility: You are fully responsible for your user-generated content, ensuring it doesn't violate this agreement or any third-party rights.</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">VIII. Intellectual Property</h2>
+                <p>Platform Content: All platform content, including but not limited to text, design, logos, graphics, icons, images, and software, belongs to us or our licensors. Without our prior written permission, copying, modifying, distributing, displaying, or using these contents is prohibited.</p>
+                <p>Trademarks: Platform-related specific trademarks (such as platform names and logos) are company property and may not be used without authorization.</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">IX. Disclaimer</h2>
+                <p>As-Is Basis: The platform is provided on an "as-is" and "as-available" basis, without any express or implied warranties, including but not limited to the platform's availability, security, accuracy, completeness, and the reliability of information, data, and services provided.</p>
+                <p>Risk Assumption: Use of the platform is at your own risk. We are not liable for any direct or indirect losses or damages resulting from platform use, except as otherwise provided by law.</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">X. Limitation of Liability</h2>
+                <p>To the maximum extent permitted by law, we are not liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the platform. If liability compensation is involved, the compensation amount is typically limited to your past 6 months.</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">XI. Agreement Termination</h2>
+                <p>Platform Termination: If you violate any terms of this agreement, or if we reasonably determine that your use may harm the platform, other users, or company interests, we reserve the right to suspend or terminate your platform access without notice.</p>
+                <p>User Termination: You may request to stop using the platform and delete your account at any time following platform procedures.</p>
+                <p>Termination Consequences: After termination, certain provisions (such as intellectual property ownership, disclaimers, liability limitations, dispute resolution) may continue to be effective, depending on the nature of the provisions and legal requirements.</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">XII. Governing Law and Dispute Resolution</h2>
+                <p>Governing Law: This agreement is governed by U.S. law, excluding its conflict of law rules.</p>
+                <p>Dispute Resolution: Any disputes arising from this agreement should first be resolved through friendly negotiation; if unsuccessful, parties may choose arbitration (if arbitration clauses exist) or file a lawsuit with a court of competent jurisdiction according to law. During dispute resolution, both parties shall continue to perform other terms of this agreement except for disputed matters.</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">XIII. Third-Party Services</h2>
+                <p>The platform may provide links to or integrate with third-party websites, services, or products. We are not responsible for third-party content, behavior, privacy policies, or service quality. When using third-party services, you should comply with their regulations and assume the risks.</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">XIV. Miscellaneous</h2>
+                <p>Complete Agreement: This agreement constitutes the complete agreement between you and us regarding platform use, superseding all prior oral or written agreements.</p>
+                <p>Severability: If any provision of this agreement is deemed invalid, illegal, or unenforceable, it does not affect the validity, legality, and enforceability of other provisions. Both parties shall negotiate to modify the invalid, illegal, or unenforceable provision to meet legal requirements and agreement purposes.</p>
+                <p>Waiver and Delay: Our failure to exercise or delay in exercising any rights under this agreement does not constitute a waiver of such rights; single or partial exercise of rights does not preclude the exercise of other rights or further exercise of such rights.</p>
+                <p>Contact Information: If you have any questions, suggestions, or complaints about this agreement or platform use, you can contact us through:</p>
+                <p>Email: zhengdongcui0@gmail.com</p>
+            </div>
+
+            <footer>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="text-align: left;">
+                        <p>&copy; 2025 Java Thread Dump Analyzer. All rights reserved.</p>
+                        <p>Contact: <a href="mailto:zhengdongcui0@gmail.com">zhengdongcui0@gmail.com</a></p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p><a href="/">Back to Home</a></p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+        <div class="zh-version">
+            <h1>服务条款</h1>
+            <div class="section">
+                <h2 class="section-title">一、引言</h2>
+                <p>欢迎使用threadanalyzer.online。通过访问或使用threadanalyzer.online，您同意遵守并受本《服务条款》（https://www.threadanalyzer.online/privacy-policy）约束。本协议适用于所有类型的用户。</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">二、条款接受</h2>
+                <p>使用本平台即确认您已阅读、理解并同意本协议。若不同意，请停止使用平台。</p>
+                <p>您需满足一定年龄要求，通常为至少13岁。</p>
+                <p>本协议可能包含其他相关政策（如《隐私政策》等），共同构成您使用平台的规则框架。</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">三、协议修改</h2>
+                <p>我们保留随时更新本协议的权利。</p>
+                <p>修改后的协议将在平台显著位置发布，您继续使用平台即视为接受新协议。建议您定期查看协议更新。</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">四、资格条件</h2>
+                <p>年龄限制：您必须达到规定年龄13岁才能使用平台。</p>
+                <p>法律合规：使用平台即保证遵守平台相关合作方的服务条款（如有，如关联平台的使用条款）以及所有适用的法律法规。</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">五、用户信息</h2>
+                <p>我们收集您的姓名、电子邮件地址和支付信息以处理我们网站上的订单。</p>
+                <p>我们还通过使用cookies收集非个人数据。</p>
+                <p>我们的隐私政策解释了我们如何使用和保护您的信息。</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">六、用户责任</h2>
+                <p>合法合规使用：不得将平台用于非法目的，或违反任何适用法律、法规及第三方权利。</p>
+                <p>内容规范：禁止上传、发布或传播有害、侵权、欺诈、辱骂、诽谤等不当内容，包括但不限于病毒、垃圾信息、侵犯知识产权的材料等。</p>
+                <p>行为规范：不得进行干扰平台正常运行的行为，如数据抓取、逆向工程、恶意攻击等；不得冒充他人；不得利用平台从事与平台宗旨不符的活动。</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">七、用户生成内容</h2>
+                <p>所有权：您对自己提交到平台的内容保留所有权。</p>
+                <p>授权许可：您授予我们一项非独占性、全球性、免版税、可再许可和可转让的许可，以便我们为运营和改进平台的目的使用、复制、分发、展示和执行该内容。</p>
+                <p>责任归属：您对自己的用户生成内容负全部责任，确保内容不违反本协议及任何第三方权利。</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">八、知识产权</h2>
+                <p>平台内容：平台的所有内容，包括但不限于文字、设计、标识、图形、图标、图像、软件等，归我们或我们的许可方所有。未经我们事先书面许可，禁止复制、修改、分发、展示或使用这些内容。</p>
+                <p>商标：平台相关的特定商标（如平台名称、标识等）为公司所有，未经授权不得使用。</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">九、免责声明</h2>
+                <p>按现状提供：平台按"现状"和"可提供"的基础提供，我们不提供任何明示或暗示的保证，包括但不限于平台的可用性、安全性、准确性、完整性，以及平台提供的信息、数据、服务等的可靠性。</p>
+                <p>风险自担：使用平台的风险由您自行承担，对于因使用平台而导致的任何直接或间接损失、损害，我们不承担责任，但法律另有规定的除外。</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">十、责任限制</h2>
+                <p>在法律允许的最大范围内，对于因您使用平台而产生的任何间接、偶然、特殊、后果性或惩罚性损害，我们不承担责任。若涉及责任赔偿，赔偿总额通常限制在您过去6个月。</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">十一、协议终止</h2>
+                <p>平台终止：若您违反本协议任何条款，或我们基于合理判断认为您的使用行为可能损害平台、其他用户或公司利益，我们有权在不另行通知的情况下暂停或终止您使用平台的权利。</p>
+                <p>用户终止：您可随时按平台规定的流程和方式，申请停止使用平台并注销账户。</p>
+                <p>终止后果：协议终止后，某些条款（如知识产权归属、免责声明、责任限制、争议解决等）可能继续有效，具体依条款性质和法律规定确定。</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">十二、管辖法律与争议解决</h2>
+                <p>管辖法律：本协议受美国法律管辖，但排除其冲突法规则。</p>
+                <p>争议解决：如双方因本协议产生争议，应首先通过友好协商解决；协商不成的，可根据法律规定选择仲裁（若有仲裁条款约定）或向有管辖权的法院提起诉讼。在争议解决期间，除争议事项外，双方应继续履行本协议其他条款。</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">十三、第三方服务</h2>
+                <p>平台可能提供链接或接入第三方网站、服务或产品。我们对第三方的内容、行为、隐私政策及服务质量等不承担责任。您使用第三方服务时，应遵守其相关规定，风险自负。</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">十四、其他条款</h2>
+                <p>完整协议：本协议构成您与我们之间关于使用平台的完整协议，取代之前所有口头或书面的相关约定。</p>
+                <p>条款可分割性：若本协议任何条款被认定为无效、违法或不可执行，不影响其他条款的有效性、合法性和可执行性，双方应协商修改该无效、违法或不可执行的条款，使其符合法律要求及协议目的。</p>
+                <p>弃权与延迟：我们未行使或延迟行使本协议项下任何权利，不构成对该权利的放弃；单项或部分行使权利，不排除对其他权利的行使或进一步行使该权利。</p>
+                <p>联系方式：若您对本协议或平台使用有任何疑问、建议或投诉，可通过以下方式联系我们：</p>
+                <p>电子邮件：zhengdongcui0@gmail.com</p>
+            </div>
+
+            <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="text-align: left;">
+                        <p style="margin: 5px 0; color: #666;">&copy; 2025 Java线程转储分析器。保留所有权利。</p>
+                        <p style="margin: 5px 0; color: #666;">联系方式：<a href="mailto:zhengdongcui0@gmail.com" style="color: #3498db; text-decoration: none;">zhengdongcui0@gmail.com</a></p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="margin: 5px 0;"><a href="/" style="color: #3498db; text-decoration: none;">返回首页</a></p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('preferred_language') || 'en';
+            switchLanguage(savedLang);
+        });
+
+        function switchLanguage(lang) {
+            const enVersion = document.querySelector('.en-version');
+            const zhVersion = document.querySelector('.zh-version');
+            const enButton = document.querySelector('.language-btn:nth-child(1)');
+            const zhButton = document.querySelector('.language-btn:nth-child(2)');
+            
+            if (lang === 'en') {
+                enVersion.classList.add('active');
+                zhVersion.classList.remove('active');
+                enButton.classList.add('active');
+                zhButton.classList.remove('active');
+            } else {
+                zhVersion.classList.add('active');
+                enVersion.classList.remove('active');
+                zhButton.classList.add('active');
+                enButton.classList.remove('active');
+            }
+
+            localStorage.setItem('preferred_language', lang);
+        }
+    </script>
+</body>
+</html>

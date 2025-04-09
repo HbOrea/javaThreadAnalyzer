@@ -49,28 +49,35 @@
 
         .language-switch {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-
-        .language-btn {
-            background-color: transparent;
-            color: #3498db;
-            border: 1px solid #3498db;
+        .language-select {
             padding: 5px 10px;
-            margin-left: 5px;
-            border-radius: 4px;
+            border: none;
+            background-color: transparent;
+            color: #333;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 20px;
         }
-
-        .language-btn.active {
-            background-color: #3498db;
-            color: white;
+        .language-select:focus {
+            outline: none;
         }
-
-        .language-btn:hover:not(.active) {
-            background-color: #f5f5f5;
+        .blog-btn {
+            background-color: transparent;
+            color: #333;
+            border: none;
+            padding: 5px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+            font-size: 20px;
+            text-decoration: none;
+        }
+        .blog-btn:hover {
+            text-decoration: underline;
         }
 
         .en-version,
@@ -87,8 +94,11 @@
 <body>
     <div class="container">
         <div class="language-switch">
-            <button class="language-btn active" onclick="switchLanguage('en')">English</button>
-            <button class="language-btn" onclick="switchLanguage('zh')">中文</button>
+            <a href="/blog" class="blog-btn" id="blog-btn">博客</a>
+            <select class="language-select" id="language-select" onchange="switchLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="zh">简体中文</option>
+            </select>
         </div>
 
         <div class="en-version active">
@@ -301,31 +311,35 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedLang = localStorage.getItem('preferred_language') || 'en';
-            switchLanguage(savedLang);
-        });
-
-        function switchLanguage(lang) {
-            const enVersion = document.querySelector('.en-version');
-            const zhVersion = document.querySelector('.zh-version');
-            const enButton = document.querySelector('.language-btn:nth-child(1)');
-            const zhButton = document.querySelector('.language-btn:nth-child(2)');
-            
-            if (lang === 'en') {
-                enVersion.classList.add('active');
-                zhVersion.classList.remove('active');
-                enButton.classList.add('active');
-                zhButton.classList.remove('active');
-            } else {
-                zhVersion.classList.add('active');
-                enVersion.classList.remove('active');
-                zhButton.classList.add('active');
-                enButton.classList.remove('active');
-            }
-
-            localStorage.setItem('preferred_language', lang);
+        // 初始化语言设置
+        function initLanguage() {
+            // 从本地存储获取语言设置，默认为英文
+            const lang = localStorage.getItem('preferredLanguage') || 'en';
+            document.getElementById('language-select').value = lang;
+            switchLanguage(lang);
         }
+
+        // 切换语言时更新UI
+        function switchLanguage(lang) {
+            // 保存语言偏好
+            localStorage.setItem('preferredLanguage', lang);
+            
+            // 更新UI
+            if (lang === 'en') {
+                document.querySelector('.en-version').classList.add('active');
+                document.querySelector('.zh-version').classList.remove('active');
+                document.getElementById('blog-btn').innerText = 'Blog';
+                document.title = 'Terms of Service - Java Thread Dump Analyzer';
+            } else {
+                document.querySelector('.zh-version').classList.add('active');
+                document.querySelector('.en-version').classList.remove('active');
+                document.getElementById('blog-btn').innerText = '博客';
+                document.title = '服务条款 - Java 线程转储分析工具';
+            }
+        }
+
+        // 页面加载时初始化语言
+        window.onload = initLanguage;
     </script>
 </body>
 </html>

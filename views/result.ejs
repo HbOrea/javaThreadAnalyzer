@@ -117,42 +117,33 @@
             position: absolute;
             top: 10px;
             right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .language-btn {
-            background-color: transparent;
-            color: #3498db;
-            border: 1px solid #3498db;
+        .language-select {
             padding: 5px 10px;
-            margin-left: 5px;
-            border-radius: 4px;
+            border: none;
+            background-color: transparent;
+            color: #333;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 20px;
         }
-        .language-btn.active {
-            background-color: #3498db;
-            color: white;
+        .language-select:focus {
+            outline: none;
         }
-        /* 美化查看详情按钮 */
-        .group-details-link {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 8px 15px;
-            background: #3498db;
-            color: white;
-            border-radius: 4px;
+        .blog-btn {
+            background-color: transparent;
+            color: #333;
+            border: none;
+            padding: 5px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+            font-size: 20px;
             text-decoration: none;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .group-details-link:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        .details-icon {
-            margin-left: 5px;
-            font-weight: bold;
+        .blog-btn:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -160,8 +151,11 @@
     <div class="container">
         <!-- 语言切换按钮 -->
         <div class="language-switch">
-            <button class="language-btn" onclick="switchLanguage('en')" id="en-btn">English</button>
-            <button class="language-btn" onclick="switchLanguage('zh')" id="zh-btn">中文</button>
+            <a href="/blog" class="blog-btn" id="blog-btn">博客</a>
+            <select class="language-select" id="language-select" onchange="switchLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="zh">简体中文</option>
+            </select>
         </div>
         
         <h1 id="result-title">Analysis Results</h1>
@@ -250,6 +244,7 @@
         function initLanguage() {
             // 从本地存储获取语言设置，默认为英文
             const lang = localStorage.getItem('preferredLanguage') || 'en';
+            document.getElementById('language-select').value = lang;
             switchLanguage(lang);
         }
 
@@ -260,8 +255,6 @@
             
             // 更新UI
             if (lang === 'en') {
-                document.getElementById('en-btn').classList.add('active');
-                document.getElementById('zh-btn').classList.remove('active');
                 document.getElementById('page-title').innerText = 'Analysis Results';
                 document.getElementById('result-title').innerText = 'Analysis Results';
                 document.getElementById('stats-title').innerText = 'Thread Statistics';
@@ -270,6 +263,7 @@
                 document.getElementById('thread-groups-title').innerText = 'Thread Groups (Top 10)';
                 document.getElementById('potential-issues-title').innerText = 'Potential Issues';
                 document.getElementById('back-link').innerText = '← Back to Home';
+                document.getElementById('blog-btn').innerText = 'Blog';
                 
                 // 更新所有线程数量文本
                 document.querySelectorAll('.thread-count-text').forEach(el => {
@@ -303,8 +297,6 @@
                     el.innerText = 'View Details';
                 });
             } else {
-                document.getElementById('en-btn').classList.remove('active');
-                document.getElementById('zh-btn').classList.add('active');
                 document.getElementById('page-title').innerText = '分析结果';
                 document.getElementById('result-title').innerText = '分析结果';
                 document.getElementById('stats-title').innerText = '线程统计';
@@ -313,6 +305,7 @@
                 document.getElementById('thread-groups-title').innerText = '线程组统计（Top 10）';
                 document.getElementById('potential-issues-title').innerText = '潜在问题';
                 document.getElementById('back-link').innerText = '← 返回首页';
+                document.getElementById('blog-btn').innerText = '博客';
                 
                 // 更新所有线程数量文本
                 document.querySelectorAll('.thread-count-text').forEach(el => {

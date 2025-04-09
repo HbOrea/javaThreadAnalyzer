@@ -1,0 +1,56 @@
+        .language-switch {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .language-select {
+            padding: 5px 10px;
+            border: 1px solid #3498db;
+            border-radius: 4px;
+            background-color: white;
+            color: #3498db;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .language-select:focus {
+            outline: none;
+            border-color: #2980b9;
+        }
+        .blog-btn {
+        <!-- 语言切换按钮 -->
+        <div class="language-switch">
+            <a href="/blog" class="blog-btn" id="blog-btn">博客</a>
+            <select class="language-select" id="language-select" onchange="switchLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="zh">简体中文</option>
+            </select>
+        </div>
+        // 初始化语言设置
+        function initLanguage() {
+            // 从本地存储获取语言设置，默认为英文
+            const lang = localStorage.getItem('preferredLanguage') || 'en';
+            document.getElementById('language-select').value = lang;
+            switchLanguage(lang);
+        }
+
+        // 切换语言
+        function switchLanguage(lang) {
+            // 保存语言偏好
+            localStorage.setItem('preferredLanguage', lang);
+            
+            // 更新UI
+            if (lang === 'en') {
+                document.getElementById('page-title').innerText = 'Blog Post';
+                document.getElementById('result-title').innerText = 'Blog Post';
+                document.getElementById('back-link').innerText = '← Back to Blog';
+                document.getElementById('blog-btn').innerText = 'Blog';
+            } else {
+                document.getElementById('page-title').innerText = '博客文章';
+                document.getElementById('result-title').innerText = '博客文章';
+                document.getElementById('back-link').innerText = '← 返回博客';
+                document.getElementById('blog-btn').innerText = '博客';
+            }
+        } 

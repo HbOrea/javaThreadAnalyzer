@@ -1,0 +1,72 @@
+        .language-switch {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .language-select {
+            padding: 5px 10px;
+            border: none;
+            background-color: transparent;
+            color: #333;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .language-select:focus {
+            outline: none;
+        }
+        .blog-btn {
+            background-color: transparent;
+            color: #333;
+            border: none;
+            padding: 5px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+            font-size: 20px;
+            text-decoration: none;
+        }
+        .blog-btn:hover {
+            text-decoration: underline;
+        }
+        // 语言切换按钮
+        <div class="language-switch">
+            <a href="/blog" class="blog-btn" id="blog-btn">Blog</a>
+            <select class="language-select" id="language-select" onchange="switchLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="zh">简体中文</option>
+            </select>
+        </div>
+        // 初始化语言设置
+        function initLanguage() {
+            // 从本地存储获取语言设置，默认为英文
+            const lang = localStorage.getItem('preferredLanguage') || 'en';
+            document.getElementById('language-select').value = lang;
+            switchLanguage(lang);
+        }
+
+        // 切换语言
+        function switchLanguage(lang) {
+            // 保存语言偏好
+            localStorage.setItem('preferredLanguage', lang);
+            
+            // 更新UI
+            if (lang === 'en') {
+                document.getElementById('page-title').innerText = 'Thread Group Analysis';
+                document.getElementById('result-title').innerText = 'Thread Group Analysis';
+                document.getElementById('stats-title').innerText = 'Thread Statistics';
+                document.getElementById('total-threads-label').innerText = 'Total Threads:';
+                document.getElementById('state-distribution-title').innerText = 'State Distribution';
+                document.getElementById('back-link').innerText = '← Back to Results';
+                document.getElementById('blog-btn').innerText = 'Blog';
+            } else {
+                document.getElementById('page-title').innerText = '线程组分析';
+                document.getElementById('result-title').innerText = '线程组分析';
+                document.getElementById('stats-title').innerText = '线程统计';
+                document.getElementById('total-threads-label').innerText = '总线程数:';
+                document.getElementById('state-distribution-title').innerText = '状态分布';
+                document.getElementById('back-link').innerText = '← 返回结果页';
+                document.getElementById('blog-btn').innerText = '博客';
+            }
+        } 

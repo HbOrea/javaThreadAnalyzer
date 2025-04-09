@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客 - Java Thread Dump Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .language-switch {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .language-select {
+            padding: 5px 10px;
+            border: none;
+            background-color: transparent;
+            color: #333;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .language-select:focus {
+            outline: none;
+        }
+        .blog-btn {
+            background-color: transparent;
+            color: #333;
+            border: none;
+            padding: 5px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+            font-size: 20px;
+            text-decoration: none;
+        }
+        .blog-btn:hover {
+            text-decoration: underline;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .blog-post {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .blog-post:last-child {
+            border-bottom: none;
+        }
+        .blog-post h2 {
+            margin-bottom: 10px;
+        }
+        .blog-post .date {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .blog-post .excerpt {
+            margin-bottom: 15px;
+        }
+        .read-more {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .read-more:hover {
+            text-decoration: underline;
+        }
+        footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #666;
+        }
+        footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 语言切换按钮 -->
+        <div class="language-switch">
+            <a href="/blog" class="blog-btn" id="blog-btn">Blog</a>
+            <select class="language-select" id="language-select" onchange="switchLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="zh">简体中文</option>
+            </select>
+        </div>
+
+        <h1 id="blog-title">博客</h1>
+
+        <div class="blog-posts"
+        </div>
+
+        <footer>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="text-align: left;">
+                    <p id="footer-text">&copy; 2025 Java线程转储分析器。保留所有权利。</p>
+                    <p id="contact-info">联系方式：<a href="mailto:zhengdongcui0@gmail.com">zhengdongcui0@gmail.com</a></p>
+                </div>
+                <div style="text-align: right;">
+                    <p><a href="/" id="back-home">返回首页</a></p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // 初始化语言设置
+        function initLanguage() {
+            // 从本地存储获取语言设置，默认为英文
+            const lang = localStorage.getItem('preferredLanguage') || 'en';
+            document.getElementById('language-select').value = lang;
+            switchLanguage(lang);
+        }
+
+        // 切换语言
+        function switchLanguage(lang) {
+            // 保存语言偏好
+            localStorage.setItem('preferredLanguage', lang);
+            
+            // 更新UI
+            if (lang === 'en') {
+                document.title = 'Blog - Java Thread Dump Analyzer';
+                document.getElementById('blog-btn').innerText = 'Blog';
+                document.getElementById('blog-title').innerText = 'Blog';
+                document.getElementById('footer-text').innerText = '© 2025 Java Thread Dump Analyzer. All rights reserved.';
+                document.getElementById('contact-info').innerHTML = 'Contact: <a href="mailto:zhengdongcui0@gmail.com">zhengdongcui0@gmail.com</a>';
+                document.getElementById('back-home').innerText = 'Back to Home';
+            } else {
+                document.title = '博客 - Java Thread Dump Analyzer';
+                document.getElementById('blog-btn').innerText = '博客';
+                document.getElementById('blog-title').innerText = '博客';
+                document.getElementById('footer-text').innerText = '© 2025 Java线程转储分析器。保留所有权利。';
+                document.getElementById('contact-info').innerHTML = '联系方式：<a href="mailto:zhengdongcui0@gmail.com">zhengdongcui0@gmail.com</a>';
+                document.getElementById('back-home').innerText = '返回首页';
+            }
+        }
+
+        // 页面加载时初始化语言
+        window.onload = initLanguage;
+    </script>
+</body>
+</html> 

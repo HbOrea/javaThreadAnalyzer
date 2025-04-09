@@ -31,6 +31,12 @@ app.get('/', (req, res) => {
     res.render('index', { lang });
 });
 
+// 博客路由
+app.get('/blog', (req, res) => {
+    const lang = req.query.lang || 'en'; // 默认英文
+    res.render('blog', { lang });
+});
+
 // 文件分析路由
 app.post('/analyze', upload.single('jstackFile'), (req, res) => {
     if (!req.file) {

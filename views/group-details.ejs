@@ -23,6 +23,7 @@
             padding: 25px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
         }
         h1 {
             color: #2c3e50;
@@ -35,10 +36,11 @@
             border: 1px solid #eee;
             border-radius: 6px;
             overflow: hidden;
+            background: #f8f9fa;
         }
         .thread-header {
             padding: 12px 15px;
-            background: #f9f9f9;
+            background: #f8f9fa;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
@@ -46,22 +48,22 @@
             transition: background 0.2s;
         }
         .thread-header:hover {
-            background: #f0f0f0;
+            background: #e9ecef;
         }
         .stack-trace {
             padding: 15px;
             background: white;
-            display: block; /* 修改为默认显示 */
+            display: block;
             border-top: 1px solid #eee;
         }
         .toggle-icon::before {
-            content: "▼"; /* 修改为默认展开状态的图标 */
+            content: "▼";
             margin-right: 8px;
-            color: #2980b9;
+            color: #3498db;
         }
         .expanded .toggle-icon::before {
-            content: "▶"; /* 修改为折叠状态的图标 */
-            color: #3498db;
+            content: "▶";
+            color: #2980b9;
         }
         .state-tag {
             display: inline-block;
@@ -91,52 +93,68 @@
             border-radius: 4px;
             text-decoration: none;
             transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
         }
         .back-link:hover {
             background: #2980b9;
         }
         .thread-count {
-            background: #f0f0f0;
+            background: #f8f9fa;
             padding: 10px 15px;
             border-radius: 4px;
             display: inline-block;
             margin-bottom: 15px;
+            border: 1px solid #eee;
         }
         .language-switch {
             position: absolute;
             top: 10px;
             right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .language-btn {
-            background-color: transparent;
-            color: #3498db;
-            border: 1px solid #3498db;
+        .language-select {
             padding: 5px 10px;
-            margin-left: 5px;
-            border-radius: 4px;
+            border: none;
+            background-color: transparent;
+            color: #333;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 20px;
         }
-        .language-btn.active {
-            background-color: #3498db;
-            color: white;
+        .language-select:focus {
+            outline: none;
         }
-        /* 移除搜索框样式 */
-        
+        .blog-btn {
+            background-color: transparent;
+            color: #333;
+            border: none;
+            padding: 5px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+            font-size: 20px;
+            text-decoration: none;
+        }
+        .blog-btn:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- 语言切换按钮 -->
         <div class="language-switch">
-            <button class="language-btn" onclick="switchLanguage('en')" id="en-btn">English</button>
-            <button class="language-btn" onclick="switchLanguage('zh')" id="zh-btn">中文</button>
+            <a href="/blog" class="blog-btn" id="blog-btn">Blog</a>
+            <select class="language-select" id="language-select" onchange="switchLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="zh">简体中文</option>
+            </select>
         </div>
         
         <h1><span id="instance-group-label">实例组：</span><%= groupName %></h1>
         <p><span id="total-threads-label">共</span> <%= threads.length %> <span id="threads-text">个线程</span></p>
-        
-        <!-- 移除搜索框 -->
         
         <% threads.forEach(thread => { %>
             <div class="thread-card">

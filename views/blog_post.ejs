@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>博客 - Java Thread Dump Analyzer</title>
+    <title><%= title %> - Java Thread Dump Analyzer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -57,31 +57,36 @@
         h1, h2, h3 {
             color: #2c3e50;
         }
-        .blog-post {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
+        .blog-content {
+            margin-top: 20px;
         }
-        .blog-post:last-child {
-            border-bottom: none;
-        }
-        .blog-post h2 {
-            margin-bottom: 10px;
-        }
-        .blog-post .date {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .blog-post .excerpt {
+        .blog-content h2 {
+            margin-top: 30px;
             margin-bottom: 15px;
         }
-        .read-more {
-            color: #3498db;
-            text-decoration: none;
+        .blog-content p {
+            margin-bottom: 15px;
         }
-        .read-more:hover {
-            text-decoration: underline;
+        .blog-content ul, .blog-content ol {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+        .blog-content code {
+            background-color: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .blog-content pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+        .blog-content pre code {
+            background-color: transparent;
+            padding: 0;
         }
         footer {
             margin-top: 30px;
@@ -97,6 +102,17 @@
         footer a:hover {
             text-decoration: underline;
         }
+        .back-to-blog {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .back-to-blog a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .back-to-blog a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -110,27 +126,24 @@
             </select>
         </div>
 
-        <h1 id="blog-title">博客</h1>
+        <h1 id="blog-title"><%= title %></h1>
 
-        <div class="blog-posts">
-            <div class="blog-post">
-                <h2>Introduction to Thread Dump</h2>
-                <div class="date">April 11, 2024</div>
-                <div class="excerpt">
-                    A Thread Dump is a snapshot of threads in a Java application at a specific moment, capturing the current state information of all threads in the Java Virtual Machine (JVM). It is an essential diagnostic tool for analyzing the running status of Java applications, especially when encountering performance issues or deadlock situations.
-                </div>
-                <a href="/blog/Thread-Dump-Introduction" class="read-more" id="read-more-1">Read More</a>
-            </div>
+        <div class="blog-content">
+            <%- content %>
+        </div>
+
+        <div class="back-to-blog">
+            <a href="/blog" id="back-to-blog">← Back to Blog</a>
         </div>
 
         <footer>
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="text-align: left;">
-                    <p id="footer-text">&copy; 2025 Java线程转储分析器。保留所有权利。</p>
-                    <p id="contact-info">联系方式：<a href="mailto:zhengdongcui0@gmail.com">zhengdongcui0@gmail.com</a></p>
+                    <p id="footer-text">&copy; 2025 Java Thread Dump Analyzer. All rights reserved.</p>
+                    <p id="contact-info">Contact: <a href="mailto:zhengdongcui0@gmail.com">zhengdongcui0@gmail.com</a></p>
                 </div>
                 <div style="text-align: right;">
-                    <p><a href="/" id="back-home">返回首页</a></p>
+                    <p><a href="/" id="back-home">Back to Home</a></p>
                 </div>
             </div>
         </footer>
@@ -152,16 +165,14 @@
             
             // 更新UI
             if (lang === 'en') {
-                document.title = 'Blog - Java Thread Dump Analyzer';
                 document.getElementById('blog-btn').innerText = 'Blog';
-                document.getElementById('blog-title').innerText = 'Blog';
+                document.getElementById('back-to-blog').innerText = '← Back to Blog';
                 document.getElementById('footer-text').innerText = '© 2025 Java Thread Dump Analyzer. All rights reserved.';
                 document.getElementById('contact-info').innerHTML = 'Contact: <a href="mailto:zhengdongcui0@gmail.com">zhengdongcui0@gmail.com</a>';
                 document.getElementById('back-home').innerText = 'Back to Home';
             } else {
-                document.title = '博客 - Java Thread Dump Analyzer';
                 document.getElementById('blog-btn').innerText = '博客';
-                document.getElementById('blog-title').innerText = '博客';
+                document.getElementById('back-to-blog').innerText = '← 返回博客';
                 document.getElementById('footer-text').innerText = '© 2025 Java线程转储分析器。保留所有权利。';
                 document.getElementById('contact-info').innerHTML = '联系方式：<a href="mailto:zhengdongcui0@gmail.com">zhengdongcui0@gmail.com</a>';
                 document.getElementById('back-home').innerText = '返回首页';

@@ -4,6 +4,7 @@ const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 let analysisCache = null;
 const path = require('path');
+const marked = require('marked');
 
 // 添加一个全局变量来存储最新的分析结果
 let latestAnalysis = null;
@@ -23,6 +24,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 // 配置静态文件服务
 app.use(express.static(path.join(__dirname, 'public')));
+
+// 添加博客路由
+const blogRouter = require('./routes/blog');
+app.use('/blog', blogRouter);
 
 // 首页路由
 // 在路由处理中添加语言参数支持

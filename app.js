@@ -43,7 +43,7 @@ app.get('/blog', (req, res) => {
 });
 
 // 文件分析路由
-app.post('/analyze', upload.single('jstackFile'), (req, res) => {
+app.post('/analyze', upload.single('threadDump'), (req, res) => {
     if (!req.file) {
         return res.status(400).send('No file uploaded');
     }

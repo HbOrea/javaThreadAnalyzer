@@ -7,40 +7,92 @@
     <meta name="keywords" content="Java, Thread Dump, JStack, Thread Analysis, Performance, Deadlock, Debugging, JVM">
     <meta name="author" content="Java Thread Analyzer">
     <title>Java Thread Dump Analyzer - Identify & Solve Threading Issues</title>
+    <link rel="icon" type="image/x-icon" href="../public/favicon.ico">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4671540604964967"
      crossorigin="anonymous"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
+            padding: 0;
+            background-color: #f8f9fa;
             color: #333;
         }
+        
+        /* 主容器样式优化 */
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
             position: relative;
         }
-        .intro-section {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 6px;
+        
+        /* 顶部导航栏 */
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: #fff;
+            border-bottom: 1px solid #eaeaea;
         }
-        .intro-section h2 {
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        /* 英雄区域 */
+        .hero-section {
+            padding: 80px 40px;
+            text-align: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
+            margin-bottom: 40px;
+        }
+        
+        .hero-section h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .hero-section p {
+            font-size: 20px;
+            color: #5a6a7e;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+        
+        .feature-card {
+            flex: 1 1 300px;
+            background: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .feature-card h3 {
             color: #2c3e50;
             margin-top: 0;
         }
-        .intro-section h3 {
-            color: #34495e;
-            margin-top: 20px;
-        }
+        
         .code-block {
             background: #f4f6f8;
             padding: 10px 15px;
@@ -63,49 +115,65 @@
             color: white;
             border: none;
             padding: 10px 20px;
+            background: #e9ecef;
+            color: #495057;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            margin-bottom: 10px;
+            transition: background 0.3s;
         }
-        button:hover {
-            background-color: #2980b9;
+        
+        .file-input-label:hover {
+            background: #dee2e6;
         }
-        .language-switch {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        
+        input[type="file"] {
+            display: none;
         }
-        .language-select {
-            padding: 5px 10px;
+        
+        #file-name-display {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        /* 按钮样式优化 */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #3498db;
+            color: white;
             border: none;
-            background-color: transparent;
-            color: #333;
+            border-radius: 6px;
+            font-size: 16px;
             cursor: pointer;
-            font-size: 20px;
+            transition: background 0.3s, transform 0.2s;
+            text-decoration: none;
         }
-        .language-select:focus {
-            outline: none;
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
         }
+        
+        .btn-primary {
+            background: #3498db;
+        }
+        
+        .btn-secondary {
+            background: #2ecc71;
+        }
+        
+        /* 文件输入样式优化 */
         .file-input {
             position: relative;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
         }
-        .file-name-display {
-            color: #666;
-            font-size: 0.9em;
-            margin-left: 10px;
-            max-width: 300px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
+        
         .file-input input[type="file"] {
             position: absolute;
             width: 0.1px;
@@ -114,177 +182,386 @@
             overflow: hidden;
             z-index: -1;
         }
+        
         .file-input-label {
             display: inline-block;
-            padding: 8px 16px;
+            padding: 12px 24px;
             background-color: #f0f0f0;
             color: #333;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-align: center;
+            width: 200px;
         }
+        
         .file-input-label:hover {
             background-color: #e0e0e0;
+            transform: translateY(-2px);
         }
-        footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            text-align: center;
+        
+        .file-name-display {
             color: #666;
+            font-size: 0.9em;
+            margin-top: 10px;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
+        
+        /* 页脚样式优化 */
+        footer {
+            margin-top: 60px;
+            padding: 40px;
+            background: #2c3e50;
+            color: #ecf0f1;
+            text-align: center;
+        }
+        
         footer a {
             color: #3498db;
             text-decoration: none;
         }
+        
         footer a:hover {
             text-decoration: underline;
+            color: #2980b9;
         }
+        
+        /* 语言切换按钮优化 */
+        .language-switch {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 100;
+        }
+        
+        .language-select {
+            padding: 8px 12px;
+            border: 1px solid #eaeaea;
+            border-radius: 4px;
+            background-color: white;
+            color: #333;
+            cursor: pointer;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .language-select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
         .blog-btn {
             background-color: transparent;
             color: #333;
-            border: none;
-            padding: 5px 10px;
-            margin-right: 5px;
+            border: 1px solid #eaeaea;
+            border-radius: 4px;
+            padding: 8px 12px;
             cursor: pointer;
-            font-size: 20px;
+            font-size: 14px;
             text-decoration: none;
+            transition: all 0.3s;
         }
+        
         .blog-btn:hover {
-            text-decoration: underline;
+            background-color: #f8f9fa;
+            border-color: #d0d0d0;
         }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 60px 20px;
+            }
+            
+            .hero-section h1 {
+                font-size: 32px;
+            }
+            
+            .hero-section p {
+                font-size: 18px;
+            }
+            
+            .nav-container {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        /* 文件输入样式优化 */
+        .file-input-container {
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .file-input-label {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #3498db; /* 使用与主按钮相同的颜色 */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-align: center;
+            width: 200px;
+        }
+
+        .file-input-label:hover {
+            background-color: #2980b9; /* 使用与主按钮相同的悬停颜色 */
+            transform: translateY(-2px);
+        }
+        
+        #en-file-info, #zh-file-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        #en-file-name-display, #zh-file-name-display {
+            color: #666;
+            font-size: 0.9em;
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .intro-section {
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            margin: 30px 0;
+        }
+        
+        .section-title {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: #3498db;
+            border-radius: 3px;
+        }
+        
+        .info-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .info-card h3 {
+            color: #3498db;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 22px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .feature-list {
+            list-style-type: none;
+            padding-left: 5px;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-icon {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        .code-block {
+            background: #f4f6f8;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        /* 保留原有样式
+        // ... existing code ... */
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 语言切换按钮 -->
-        <div class="language-switch">
-            <a href="/blog" class="blog-btn" id="blog-btn">Blog</a>
-            <select class="language-select" id="language-select" onchange="switchLanguage(this.value)">
-                <option value="en">English</option>
-                <option value="zh">简体中文</option>
-            </select>
+        <!-- 导航栏 -->
+        <div class="nav-container">
+            <a href="/" class="logo" id="site-logo">Java Thread Analyzer</a>
+            <div class="nav-links">
+                <a href="/blog" class="blog-btn" id="blog-btn">Blog</a>
+                <select class="language-select" id="language-select" onchange="switchLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="zh">简体中文</option>
+                </select>
+            </div>
         </div>
-
-        <header>
+        
+        <!-- 英文区域 -->
+        <div class="hero-section">
             <h1 id="main-title">Java Thread Dump Analyzer</h1>
-            <p class="subtitle" id="subtitle">Analyze thread dumps to identify performance issues and deadlocks</p>
-        </header>
+            <p id="subtitle">Analyze thread dumps to identify performance issues and deadlocks</p>
+            <label for="hero-file-input" class="btn btn-primary" id="hero-start-btn">Get Started</label>
+            <input type="file" name="threadDump" id="hero-file-input" accept=".txt" required style="display:none;" onchange="handleHeroFileSelect()">
+            <div id="hero-file-info" style="display: none; margin-top: 15px;">
+                <span id="hero-file-name-display" style="color: #2c3e50; font-weight: 500;"></span>
+                <button onclick="submitHeroFile()" class="btn" style="margin-left: 10px;">Analyze</button>
+                <button onclick="clearHeroFile()" class="btn" style="margin-left: 10px; background-color: #e74c3c;">Clear</button>
+            </div>
 
+            <br><br>
+
+            <p id="en-file-hint" style="font-size: 0.8em; color: #666;">Please select a .txt file generated by the jstack command</p>
+        </div>
+        
         <div class="intro-section">
             <!-- 英文版内容 -->
             <div id="en-content">
-                <h2>Java Thread Dump Analyzer</h2>
+                <h2 class="section-title">Java Thread Dump Analyzer</h2>
                 
-                <h3>What is a Thread Dump?</h3>
-                <p>A Thread Dump is a snapshot of the Java virtual machine's threads at runtime, recording the state of all current threads. It's particularly useful for analyzing:</p>
-                <ul>
-                    <li>Thread deadlocks</li>
-                    <li>Thread blocking</li>
-                    <li>Performance bottlenecks</li>
-                    <li>Resource contention</li>
-                </ul>
-
-                <h3>How to Get a Thread Dump?</h3>
-                <p>Use the jstack command to capture a thread dump from a running Java program:</p>
-                <div class="code-block">
-                    jstack [process-id] > thread-dump.txt
-                </div>
-                <p>Or use the following command to find Java process IDs:</p>
-                <div class="code-block">
-                    jps -l
+                <div class="info-card">
+                    <h3>What is a Thread Dump?</h3>
+                    <p>A Thread Dump is a snapshot of the Java virtual machine's threads at runtime, recording the state of all current threads. It's particularly useful for analyzing:</p>
+                    <ul class="feature-list">
+                        <li><span class="feature-icon">🔍</span> Thread deadlocks</li>
+                        <li><span class="feature-icon">⚠️</span> Thread blocking</li>
+                        <li><span class="feature-icon">⏱️</span> Performance bottlenecks</li>
+                        <li><span class="feature-icon">🔄</span> Resource contention</li>
+                    </ul>
                 </div>
 
-                <h3>Important Information in Thread Dumps</h3>
-                <ul>
-                    <li><strong>Thread States</strong>: RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, etc.</li>
-                    <li><strong>Thread Names</strong>: Reflect the purpose and source of threads</li>
-                    <li><strong>Thread Priority</strong>: Affects thread scheduling</li>
-                    <li><strong>Stack Traces</strong>: Show the current execution path of threads</li>
-                    <li><strong>Lock Information</strong>: Display locks held and waited for by threads</li>
-                </ul>
+                <div class="info-card">
+                    <h3>How to Get a Thread Dump?</h3>
+                    <p>Use the jstack command to capture a thread dump from a running Java program:</p>
+                    <div class="code-block">
+                        jstack [process-id] > thread-dump.txt
+                    </div>
+                    <p>Or use the following command to find Java process IDs:</p>
+                    <div class="code-block">
+                        jps -l
+                    </div>
+                </div>
 
-                <h3>Common Issue Analysis</h3>
-                <ul>
-                    <li><strong>Deadlock Detection</strong>: Find threads waiting for each other's resources</li>
-                    <li><strong>Resource Contention</strong>: Multiple threads waiting for the same lock</li>
-                    <li><strong>Thread Pool Analysis</strong>: Check thread pool usage patterns</li>
-                    <li><strong>Performance Issues</strong>: Identify time-consuming operations and blocking points</li>
-                </ul>
+                <div class="info-card">
+                    <h3>Important Information in Thread Dumps</h3>
+                    <ul class="feature-list">
+                        <li><strong>Thread States</strong>: RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, etc.</li>
+                        <li><strong>Thread Names</strong>: Reflect the purpose and source of threads</li>
+                        <li><strong>Thread Priority</strong>: Affects thread scheduling</li>
+                        <li><strong>Stack Traces</strong>: Show the current execution path of threads</li>
+                        <li><strong>Lock Information</strong>: Display locks held and waited for by threads</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h3>Common Issue Analysis</h3>
+                    <ul class="feature-list">
+                        <li><strong>Deadlock Detection</strong>: Find threads waiting for each other's resources</li>
+                        <li><strong>Resource Contention</strong>: Multiple threads waiting for the same lock</li>
+                        <li><strong>Thread Pool Analysis</strong>: Check thread pool usage patterns</li>
+                        <li><strong>Performance Issues</strong>: Identify time-consuming operations and blocking points</li>
+                    </ul>
+                </div>
             </div>
 
             <!-- 中文版内容 -->
             <div id="zh-content" style="display: none;">
-                <h2>Java Thread Dump 分析工具</h2>
+                <h2 class="section-title">Java Thread Dump 分析工具</h2>
                 
-                <h3>什么是 Thread Dump？</h3>
-                <p>Thread Dump 是 Java 虚拟机在运行时的线程快照，记录了当前所有线程的运行状态。它对于分析以下问题特别有用：</p>
-                <ul>
-                    <li>线程死锁</li>
-                    <li>线程阻塞</li>
-                    <li>性能瓶颈</li>
-                    <li>资源争用</li>
-                </ul>
-
-                <h3>如何获取 Thread Dump？</h3>
-                <p>使用 jstack 命令可以获取运行中的 Java 程序的线程快照：</p>
-                <div class="code-block">
-                    jstack [进程ID] > thread-dump.txt
-                </div>
-                <p>或者使用以下命令查找 Java 进程 ID：</p>
-                <div class="code-block">
-                    jps -l
+                <div class="info-card">
+                    <h3>什么是 Thread Dump？</h3>
+                    <p>Thread Dump 是 Java 虚拟机在运行时的线程快照，记录了当前所有线程的运行状态。它对于分析以下问题特别有用：</p>
+                    <ul class="feature-list">
+                        <li><span class="feature-icon">🔍</span> 线程死锁</li>
+                        <li><span class="feature-icon">⚠️</span> 线程阻塞</li>
+                        <li><span class="feature-icon">⏱️</span> 性能瓶颈</li>
+                        <li><span class="feature-icon">🔄</span> 资源争用</li>
+                    </ul>
                 </div>
 
-                <h3>Thread Dump 中的重要信息</h3>
-                <ul>
-                    <li><strong>线程状态</strong>：RUNNABLE、BLOCKED、WAITING、TIMED_WAITING 等</li>
-                    <li><strong>线程名称</strong>：反映线程的用途和来源</li>
-                    <li><strong>线程优先级</strong>：影响线程调度</li>
-                    <li><strong>调用栈</strong>：显示线程当前的执行路径</li>
-                    <li><strong>锁信息</strong>：显示线程持有和等待的锁</li>
-                </ul>
+                <div class="info-card">
+                    <h3>如何获取 Thread Dump？</h3>
+                    <p>使用 jstack 命令可以获取运行中的 Java 程序的线程快照：</p>
+                    <div class="code-block">
+                        jstack [进程ID] > thread-dump.txt
+                    </div>
+                    <p>或者使用以下命令查找 Java 进程 ID：</p>
+                    <div class="code-block">
+                        jps -l
+                    </div>
+                </div>
 
-                <h3>常见问题分析</h3>
-                <ul>
-                    <li><strong>死锁检测</strong>：查找互相等待资源的线程</li>
-                    <li><strong>资源竞争</strong>：多个线程等待同一把锁</li>
-                    <li><strong>线程池分析</strong>：检查线程池的使用情况</li>
-                    <li><strong>性能问题</strong>：识别耗时操作和阻塞点</li>
-                </ul>
+                <div class="info-card">
+                    <h3>Thread Dump 中的重要信息</h3>
+                    <ul class="feature-list">
+                        <li><strong>线程状态</strong>：RUNNABLE、BLOCKED、WAITING、TIMED_WAITING 等</li>
+                        <li><strong>线程名称</strong>：反映线程的用途和来源</li>
+                        <li><strong>线程优先级</strong>：影响线程调度</li>
+                        <li><strong>调用栈</strong>：显示线程当前的执行路径</li>
+                        <li><strong>锁信息</strong>：显示线程持有和等待的锁</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h3>常见问题分析</h3>
+                    <ul class="feature-list">
+                        <li><strong>死锁检测</strong>：查找互相等待资源的线程</li>
+                        <li><strong>资源竞争</strong>：多个线程等待同一把锁</li>
+                        <li><strong>线程池分析</strong>：检查线程池的使用情况</li>
+                        <li><strong>性能问题</strong>：识别耗时操作和阻塞点</li>
+                    </ul>
+                </div>
             </div>
         </div>
-
-        <section class="upload-section">
-            <h2 id="start-analysis-title">Start Analysis</h2>
-            <form class="upload-form" action="/analyze" method="post" enctype="multipart/form-data">
-                <div class="file-input">
-                    <input type="file" name="jstackFile" accept=".txt" id="file-input">
-                    <label for="file-input" id="file-input-label" class="file-input-label">Choose File</label>
-                    <span id="file-name-display" class="file-name-display"></span>
-                </div>
-                <div class="hint" id="file-hint">
-                    Please select a .txt file generated by the jstack command
-                </div>
-                <button type="submit" id="analyze-btn">Analyze</button>
-            </form>
-        </section>
-
+        
+        <!-- 页脚 -->
         <footer>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="text-align: left;">
-                    <p id="footer-text">&copy; 2025 Java Thread Dump Analyzer. All rights reserved.</p>
-                    <p id="contact-info">Contact: <a href="mailto:zhengdongcui0@gmail.com">zhengdongcui0@gmail.com</a></p>
-                </div>
-                <div style="text-align: right;">
-                    <p><a href="/privacy-policy" style="color: #3498db; text-decoration: none;">Privacy Policy</a></p>
-                    <p><a href="/terms-of-service" style="color: #3498db; text-decoration: none;">Terms of Service</a></p>
-                </div>
+            <p id="footer-text">© 2025 Java 线程转储分析工具. 保留所有权利.</p>
+            <p id="contact-info">联系方式: <a href="mailto:zhengdongcui0@gmail.com">zhengdongcui0@gmail.com</a></p>
+            <div style="margin-top: 10px;">
+                <a href="/privacy-policy">隐私政策</a> | 
+                <a href="/terms-of-service">服务条款</a>
             </div>
         </footer>
     </div>
-
+    
     <script>
         // 初始化语言设置
         function initLanguage() {
@@ -292,15 +569,64 @@
             const lang = localStorage.getItem('preferredLanguage') || 'en';
             document.getElementById('language-select').value = lang;
             switchLanguage(lang);
-            document.getElementById('file-input').addEventListener('change', function(e) {
-                const fileName = e.target.files[0]?.name || '';
+            // 移除旧的事件监听器代码，因为handleFileSelect函数已经处理这个功能
+        }
+
+        function handleHeroFileSelect() {
+            const fileInput = document.getElementById('hero-file-input');
+            const fileName = fileInput.files[0]?.name || '';
+            
+            if (fileName) {
+                const lang = localStorage.getItem('preferredLanguage') || 'en';
                 const displayText = lang === 'en' 
                     ? `Selected file: ${fileName}` 
                     : `已选择文件：${fileName}`;
-                document.getElementById('file-name-display').textContent = displayText;
-            });
+                document.getElementById('hero-file-name-display').textContent = displayText;
+                document.getElementById('hero-file-info').style.display = 'block';
+                
+                // 隐藏"Get Started"按钮，直接显示"Analyze"按钮
+                document.getElementById('hero-start-btn').style.display = 'none';
+            } else {
+                document.getElementById('hero-file-info').style.display = 'none';
+            }
         }
 
+         // 清除已选择的文件
+         function clearHeroFile() {
+            const fileInput = document.getElementById('hero-file-input');
+            fileInput.value = ''; // 清除文件输入
+            document.getElementById('hero-file-info').style.display = 'none'; // 隐藏文件信息
+            document.getElementById('hero-start-btn').style.display = 'inline-block'; // 显示"Get Started"按钮
+        }
+        
+        // 提交英雄区域选择的文件
+        function submitHeroFile() {
+            const fileInput = document.getElementById('hero-file-input');
+            if (!fileInput.files[0]) return;
+            
+            // 创建表单并提交
+            const formData = new FormData();
+            formData.append('threadDump', fileInput.files[0]);
+            
+            // 创建并提交表单
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/analyze';
+            form.enctype = 'multipart/form-data';
+            
+            // 添加文件到表单
+            const fileField = document.createElement('input');
+            fileField.type = 'file';
+            fileField.name = 'threadDump';
+            fileField.files = fileInput.files;
+            form.appendChild(fileField);
+            
+            // 添加表单到文档并提交
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        // 切换语言时更新SEO相关元素
         // 切换语言时更新SEO相关元素
         function switchLanguage(lang) {
             // 保存语言偏好
@@ -311,9 +637,10 @@
                 document.getElementById('en-content').style.display = 'block';
                 document.getElementById('zh-content').style.display = 'none';
                 document.getElementById('start-analysis-title').innerText = 'Start Analysis';
-                document.getElementById('file-hint').innerText = 'Please select a .txt file generated by the jstack command';
-                document.getElementById('analyze-btn').innerText = 'Analyze';
-                document.getElementById('file-input-label').innerText = 'Choose File';
+                document.getElementById('en-file-hint').innerText = 'Please select a .txt file generated by the jstack command';
+                document.querySelector('#hero-file-info button:nth-child(2)').innerText = 'Analyze';
+                document.querySelector('#hero-file-info button:nth-child(3)').innerText = 'Clear';
+                document.getElementById('en-file-input-label').innerText = 'Start Analysis'; // 修改这里
                 document.getElementById('blog-btn').innerText = 'Blog';
                 // 更新SEO相关元素
                 document.getElementById('main-title').innerText = 'Java Thread Dump Analyzer';
@@ -323,21 +650,26 @@
                 document.title = 'Java Thread Dump Analyzer - Identify & Solve Threading Issues';
                 document.querySelector('a[href="/privacy-policy"]').innerText = 'Privacy Policy'; 
                 document.querySelector('a[href="/terms-of-service"]').innerText = 'Terms-of-service';
+                document.getElementById('hero-start-btn').innerText = 'Get Started';
             } else {
                 document.getElementById('en-content').style.display = 'none';
                 document.getElementById('zh-content').style.display = 'block';
                 document.getElementById('start-analysis-title').innerText = '开始分析';
-                document.getElementById('file-hint').innerText = '请选择通过 jstack 命令生成的 .txt 文件';
-                document.getElementById('analyze-btn').innerText = '开始分析';
-                document.getElementById('file-input-label').innerText = '选择文件';
+                document.getElementById('zh-file-hint').innerText = '请选择通过 jstack 命令生成的 .txt 文件';
+                document.getElementById('zh-analyze-btn').innerText = '开始分析';
+                document.querySelector('#hero-file-info button:nth-child(2)').innerText = '开始分析';
+                document.querySelector('#hero-file-info button:nth-child(3)').innerText = '清除';
+                document.getElementById('zh-file-input-label').innerText = '开始分析'; // 确保这里是"开始分析"
                 document.getElementById('blog-btn').innerText = '博客';
-                document.getElementById('main-title').innerText = 'Java 线程转储分析工具';
-                document.getElementById('subtitle').innerText = '分析线程转储以识别性能问题和死锁';
-                document.getElementById('footer-text').innerText = '© 2025 Java 线程转储分析工具. 保留所有权利.';
+                // 更新SEO相关元素
+                document.getElementById('main-title').innerText = 'Java 线程分析工具';
+                document.getElementById('subtitle').innerText = '分析线程以识别性能问题和死锁';
+                document.getElementById('footer-text').innerText = '© 2025 Java 线程分析工具. 保留所有权利.';
                 document.getElementById('contact-info').innerHTML = '联系方式: <a href="mailto:zhengdongcui0@gmail.com">zhengdongcui0@gmail.com</a>';
-                document.title = 'Java 线程转储分析工具 - 识别并解决线程问题';
+                document.title = 'Java 线程分析工具 - 识别并解决线程问题';
                 document.querySelector('a[href="/privacy-policy"]').innerText = '隐私政策';
                 document.querySelector('a[href="/terms-of-service"]').innerText = '服务条款';
+                document.getElementById('hero-start-btn').innerText = '开始分析';
             }
         }
 

@@ -4,4 +4,4 @@
 
 ## 核心内容
 - [产品](https://www.threadanalyzer.online)：how to analyze thread dump
-- [博客](https://www.threadanalyzer.online/blog/)：Introduction to Thread Dump Analyzer
+- [博客](https://www.threadanalyzer.online/blog)：Introduction to Thread Dump Analyzer

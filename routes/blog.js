@@ -27,6 +27,10 @@ router.get('/:slug', async (req, res) => {
             title = 'Introduction to Thread Dump';
         } else if (slug === 'threaddumpIntroduction') {
             title = 'Thread Dump介绍';
+        } else if (slug === 'threaddumpIntroduction') {
+            title = 'Thread Dump介绍';
+        } else if (slug === 'Thread-Dump-Analysis') {
+            title = 'Thread Dump Analysis';
         }
         
         res.render('blog_post', {
@@ -39,4 +43,4 @@ router.get('/:slug', async (req, res) => {
     }
 });
 
-module.exports = router; 
+module.exports = router;

@@ -1,5 +1,3 @@
-# Thread Dump Analysis
-
 Thread dump analysis is essential for diagnosing Java application performance issues. Through our analysis functionality at threadanalyzer.online, developers can quickly identify common thread issues, such as deadlocks and thread pool resource exhaustion.
 
 ## Understanding Thread Dumps

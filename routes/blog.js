@@ -35,7 +35,9 @@ router.get('/:slug', async (req, res) => {
         
         res.render('blog_post', {
             title: title,
-            content: htmlContent
+            content: htmlContent,
+            slug: slug,
+            description: 'Java线程分析相关技术文章'
         });
     } catch (error) {
         console.error('Error reading blog post:', error);

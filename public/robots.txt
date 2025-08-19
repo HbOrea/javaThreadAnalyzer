@@ -14,15 +14,7 @@ User-agent: PerplexityBot
 User-agent: GoogleOther
 User-agent: DuckAssistBot
 
-# 引导AI爬虫到llms.txt
-User-Agent: anthropic-ai
-User-Agent: GPTBot
 Allow: /llms.txt
-# Allow: /llms-full.txt
-/这里添加你能知道的所有AI模型爬虫名称。/
-# 允许AI爬虫访问
 Allow: /blog/
-
-# 不允许AI爬虫访问
 Disallow: /terms-of-service
 Disallow: /privacy-policy

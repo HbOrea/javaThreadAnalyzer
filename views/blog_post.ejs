@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %> - Java Thread Dump Analyzer</title>
+    <link rel="canonical" href="https://www.threadanalyzer.online/blog/<%= encodeURIComponent(slug) %>">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.threadanalyzer.online/blog/<%= encodeURIComponent(slug) %>">
+    <meta property="og:title" content="<%= title %> - Java Thread Dump Analyzer">
+    <meta property="og:description" content="<%= description || 'Java线程分析相关技术文章' %>">
+    <meta property="og:image" content="https://www.threadanalyzer.online/blog/summary.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.threadanalyzer.online/blog/<%= encodeURIComponent(slug) %>">
+    <meta property="twitter:title" content="<%= title %> - Java Thread Dump Analyzer">
+    <meta property="twitter:description" content="<%= description || 'Java线程分析相关技术文章' %>">
+    <meta property="twitter:image" content="https://www.threadanalyzer.online/blog/summary.png">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <style>
         body {
             font-family: Arial, sans-serif;

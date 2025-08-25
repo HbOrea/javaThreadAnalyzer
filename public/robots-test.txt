@@ -1,0 +1,18 @@
+# Robots.txt 测试文件
+# 此文件用于验证 robots.txt 配置是否正确
+
+# 测试内容：
+# 1. 博客页面应该可以被所有爬虫访问
+# 2. AI爬虫应该被明确允许访问博客内容
+# 3. 技术分析页面应该被禁止访问
+
+# 当前配置状态：
+# ✓ 博客页面 (/blog) - 允许访问
+# ✓ 博客文章 (/blog/Thread-Dump-Introduction) - 允许访问  
+# ✓ 博客文章 (/blog/Thread-Dump-Analysis) - 允许访问
+# ✓ 技术分析页面 (/group-details/, /thread-group/) - 禁止访问
+
+# 建议：
+# 1. 定期更新 sitemap.xml 中的 lastmod 时间
+# 2. 监控搜索引擎收录情况
+# 3. 使用 Google Search Console 验证索引状态

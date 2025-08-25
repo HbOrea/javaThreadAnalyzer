@@ -8,13 +8,58 @@ Sitemap: https://www.threadanalyzer.online/sitemap.xml
 
 # AI爬虫特定规则
 User-agent: GPTBot
-User-agent: Claude-Web
-User-agent: Anthropic-AI
-User-agent: PerplexityBot
-User-agent: GoogleOther
-User-agent: DuckAssistBot
-
-Allow: /llms.txt
+Allow: /
 Allow: /blog/
-Disallow: /terms-of-service
-Disallow: /privacy-policy
+Allow: /blog/Thread-Dump-Introduction
+Allow: /blog/Thread-Dump-Analysis
+Disallow: /group-details/
+Disallow: /thread-group/
+Disallow: /thread-group-details/
+
+User-agent: Claude-Web
+Allow: /
+Allow: /blog/
+Allow: /blog/Thread-Dump-Introduction
+Allow: /blog/Thread-Dump-Analysis
+Disallow: /group-details/
+Disallow: /thread-group/
+Disallow: /thread-group-details/
+
+User-agent: Anthropic-AI
+Allow: /
+Allow: /blog/
+Allow: /blog/Thread-Dump-Introduction
+Allow: /blog/Thread-Dump-Analysis
+Disallow: /group-details/
+Disallow: /thread-group/
+Disallow: /thread-group-details/
+
+User-agent: PerplexityBot
+Allow: /
+Allow: /blog/
+Allow: /blog/Thread-Dump-Introduction
+Allow: /blog/Thread-Dump-Analysis
+Disallow: /group-details/
+Disallow: /thread-group/
+Disallow: /thread-group-details/
+
+User-agent: GoogleOther
+Allow: /
+Allow: /blog/
+Allow: /blog/Thread-Dump-Introduction
+Allow: /blog/Thread-Dump-Analysis
+Disallow: /group-details/
+Disallow: /thread-group/
+Disallow: /thread-group-details/
+
+User-agent: DuckAssistBot
+Allow: /
+Allow: /blog/
+Allow: /blog/Thread-Dump-Introduction
+Allow: /blog/Thread-Dump-Analysis
+Disallow: /group-details/
+Disallow: /thread-group/
+Disallow: /thread-group-details/
+
+# 允许访问LLMs信息
+Allow: /llms.txt

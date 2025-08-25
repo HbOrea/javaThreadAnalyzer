@@ -12,6 +12,11 @@
     <meta property="og:title" content="<%= title %> - Java Thread Dump Analyzer">
     <meta property="og:description" content="<%= description || 'Java线程分析相关技术文章' %>">
     <meta property="og:image" content="https://www.threadanalyzer.online/blog/summary.png">
+    <meta property="article:published_time" content="<%= slug === 'Thread-Dump-Introduction' ? '2024-04-11T00:00:00+00:00' : '2025-04-28T00:00:00+00:00' %>">
+    <meta property="article:modified_time" content="<%= slug === 'Thread-Dump-Introduction' ? '2024-04-11T00:00:00+00:00' : '2025-04-28T00:00:00+00:00' %>">
+    <meta property="article:author" content="Java Thread Dump Analyzer">
+    <meta property="article:section" content="Java Thread Analysis">
+    <meta property="article:tag" content="Java, Thread Dump, Performance Analysis, JVM, Threading Issues">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
@@ -19,7 +24,68 @@
     <meta property="twitter:title" content="<%= title %> - Java Thread Dump Analyzer">
     <meta property="twitter:description" content="<%= description || 'Java线程分析相关技术文章' %>">
     <meta property="twitter:image" content="https://www.threadanalyzer.online/blog/summary.png">
+    
+    <!-- 额外的SEO meta标签 -->
+    <meta name="keywords" content="Java, Thread Dump, Performance Analysis, JVM, Threading Issues, Java性能优化">
+    <meta name="author" content="Java Thread Dump Analyzer">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta name="bingbot" content="index, follow">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- 结构化数据标记 -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "<%= title %>",
+        "description": "<%= description || 'Java线程分析相关技术文章' %>",
+        "url": "https://www.threadanalyzer.online/blog/<%= encodeURIComponent(slug) %>",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://www.threadanalyzer.online/blog/<%= encodeURIComponent(slug) %>"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Java Thread Dump Analyzer",
+            "url": "https://www.threadanalyzer.online"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "Java Thread Dump Analyzer",
+            "url": "https://www.threadanalyzer.online"
+        },
+        "datePublished": "<%= slug === 'Thread-Dump-Introduction' ? '2024-04-11' : '2025-04-28' %>",
+        "dateModified": "<%= slug === 'Thread-Dump-Introduction' ? '2024-04-11' : '2025-04-28' %>",
+        "articleSection": "Java Thread Analysis",
+        "keywords": "Java, Thread Dump, Performance Analysis, JVM, Threading Issues",
+        "inLanguage": "en-US",
+        "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://www.threadanalyzer.online"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Blog",
+                    "item": "https://www.threadanalyzer.online/blog"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "<%= title %>",
+                    "item": "https://www.threadanalyzer.online/blog/<%= encodeURIComponent(slug) %>"
+                }
+            ]
+        }
+    }
+    </script>
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -142,6 +208,17 @@
             </select>
         </div>
 
+        <!-- 面包屑导航 -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <ol style="list-style: none; padding: 0; margin: 0 0 20px 0; display: flex; align-items: center; font-size: 14px; color: #666;">
+                <li style="margin-right: 8px;"><a href="/" style="color: #3498db; text-decoration: none;" id="breadcrumb-home">首页</a></li>
+                <li style="margin-right: 8px;">&gt;</li>
+                <li style="margin-right: 8px;"><a href="/blog" style="color: #3498db; text-decoration: none;" id="breadcrumb-blog">博客</a></li>
+                <li style="margin-right: 8px;">&gt;</li>
+                <li style="color: #333;"><%= title %></li>
+            </ol>
+        </nav>
+
         <h1 id="blog-title"><%= title %></h1>
 
         <div class="blog-content">
@@ -186,12 +263,18 @@
                 document.getElementById('footer-text').innerText = '© 2025 Java Thread Dump Analyzer. All rights reserved.';
                 document.getElementById('contact-info').innerHTML = 'Contact: <a href="mailto:hi@threadanalyzer.online">hi@threadanalyzer.online</a>';
                 document.getElementById('back-home').innerText = 'Back to Home';
+                // 更新面包屑导航为英文
+                document.getElementById('breadcrumb-home').innerText = 'Home';
+                document.getElementById('breadcrumb-blog').innerText = 'Blog';
             } else {
                 document.getElementById('blog-btn').innerText = '博客';
                 document.getElementById('back-to-blog').innerText = '← 返回博客';
                 document.getElementById('footer-text').innerText = '© 2025 Java线程转储分析器。保留所有权利。';
                 document.getElementById('contact-info').innerHTML = '联系方式：<a href="mailto:hi@threadanalyzer.online">hi@threadanalyzer.online</a>';
                 document.getElementById('back-home').innerText = '返回首页';
+                // 更新面包屑导航为中文
+                document.getElementById('breadcrumb-home').innerText = '首页';
+                document.getElementById('breadcrumb-blog').innerText = '博客';
             }
         }
 

@@ -24,6 +24,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 // 配置静态文件服务
 app.use(express.static(path.join(__dirname, 'public')));
+// 博客图片等资源（如 summary.png）
+app.use('/blog', express.static(path.join(__dirname, 'blog')));
 
 // 添加博客路由
 const blogRouter = require('./routes/blog');

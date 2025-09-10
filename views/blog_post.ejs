@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %> - Java Thread Dump Analyzer</title>
+    <meta name="description" content="<%= description %>">
     <link rel="canonical" href="https://www.threadanalyzer.online/blog/<%= encodeURIComponent(slug) %>">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://www.threadanalyzer.online/blog/<%= encodeURIComponent(slug) %>">
+    <meta property="og:site_name" content="Java Thread Dump Analyzer">
     <meta property="og:title" content="<%= title %> - Java Thread Dump Analyzer">
-    <meta property="og:description" content="<%= description || 'Java线程分析相关技术文章' %>">
+    <meta property="og:description" content="<%= description %>">
     <meta property="og:image" content="https://www.threadanalyzer.online/blog/summary.png">
+    <meta property="og:image:alt" content="Thread Dump blog cover image">
     <meta property="article:published_time" content="<%= slug === 'Thread-Dump-Introduction' ? '2024-04-11T00:00:00+00:00' : '2025-04-28T00:00:00+00:00' %>">
     <meta property="article:modified_time" content="<%= slug === 'Thread-Dump-Introduction' ? '2024-04-11T00:00:00+00:00' : '2025-04-28T00:00:00+00:00' %>">
     <meta property="article:author" content="Java Thread Dump Analyzer">
@@ -22,11 +25,12 @@
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://www.threadanalyzer.online/blog/<%= encodeURIComponent(slug) %>">
     <meta property="twitter:title" content="<%= title %> - Java Thread Dump Analyzer">
-    <meta property="twitter:description" content="<%= description || 'Java线程分析相关技术文章' %>">
+    <meta property="twitter:description" content="<%= description %>">
     <meta property="twitter:image" content="https://www.threadanalyzer.online/blog/summary.png">
+    <meta name="twitter:image:alt" content="Thread Dump blog cover image">
     
     <!-- 额外的SEO meta标签 -->
-    <meta name="keywords" content="Java, Thread Dump, Performance Analysis, JVM, Threading Issues, Java性能优化">
+    <meta name="keywords" content="Java, Thread Dump, Performance Analysis, JVM, Threading Issues, Java Performance Optimization">
     <meta name="author" content="Java Thread Dump Analyzer">
     <meta name="robots" content="index, follow">
     <meta name="googlebot" content="index, follow">
@@ -39,7 +43,7 @@
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         "headline": "<%= title %>",
-        "description": "<%= description || 'Java线程分析相关技术文章' %>",
+        "description": "<%= description %>",
         "url": "https://www.threadanalyzer.online/blog/<%= encodeURIComponent(slug) %>",
         "mainEntityOfPage": {
             "@type": "WebPage",
@@ -60,6 +64,12 @@
         "articleSection": "Java Thread Analysis",
         "keywords": "Java, Thread Dump, Performance Analysis, JVM, Threading Issues",
         "inLanguage": "en-US",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.threadanalyzer.online/blog/summary.png",
+            "width": 1200,
+            "height": 630
+        },
         "breadcrumb": {
             "@type": "BreadcrumbList",
             "itemListElement": [

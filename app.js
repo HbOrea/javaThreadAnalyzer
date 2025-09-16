@@ -24,8 +24,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 // 配置静态文件服务
 app.use(express.static(path.join(__dirname, 'public')));
-// 博客图片等资源（如 summary.png）
-app.use('/blog', express.static(path.join(__dirname, 'blog')));
+// 博客图片等资源（如 summary.png）避免目录重定向
+app.use('/blog', express.static(path.join(__dirname, 'blog'), { redirect: false }));
 
 // 添加博客路由
 const blogRouter = require('./routes/blog');
@@ -38,11 +38,7 @@ app.get('/', (req, res) => {
     res.render('index', { lang });
 });
 
-// 博客路由
-app.get('/blog', (req, res) => {
-    const lang = req.query.lang || 'en'; // 默认英文
-    res.render('blog', { lang });
-});
+// 博客路由由 routes/blog.js 统一处理
 
 // 文件分析路由
 app.post('/analyze', upload.single('threadDump'), (req, res) => {
